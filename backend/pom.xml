@@ -23,6 +23,7 @@
         <module>auth-service</module>
         <module>gateway-service</module>
         <module>monitoring-service</module>
+        <module>threat-service</module>
     </modules>
 
     <properties>
