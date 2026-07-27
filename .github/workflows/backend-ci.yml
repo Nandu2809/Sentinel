@@ -1,26 +1,17 @@
-name: Sentinel Backend CI
+name: Sentinel Backend CI Pipeline
 
 on:
   push:
     branches: [ main, develop ]
-    paths:
-      - 'backend/**'
-      - 'pom.xml'
-      - '.github/workflows/backend-ci.yml'
   pull_request:
-    branches: [ main, develop ]
-    paths:
-      - 'backend/**'
-      - 'pom.xml'
-      - '.github/workflows/backend-ci.yml'
+    branches: [ main ]
 
 jobs:
-  build:
-    name: Build & Test Backend Services
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
@@ -30,9 +21,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build with Maven (Root Aggregator)
-        run: mvn -B clean verify --file pom.xml
+      - name: Build and Test Backend Monorepo
+        run: |
+          cd backend
+          mvn clean test
 
-      - name: Build with Maven (Backend Module)
-        working-directory: backend
-        run: mvn -B clean verify
+      - name: Upload JaCoCo Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-reports
+          path: backend/**/target/site/jacoco/

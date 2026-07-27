@@ -1,21 +1,18 @@
-﻿FROM maven:3.9.9-eclipse-temurin-21-alpine AS build
+# Stage 1: Build Jar artifact
+FROM maven:3.9.8-eclipse-temurin-21-alpine AS builder
+WORKDIR /build
+COPY pom.xml .
+COPY common-library common-library
+COPY auth-service auth-service
+RUN mvn clean package -pl common-library,auth-service -am -DskipTests
 
-WORKDIR /workspace
-COPY pom.xml pom.xml
-COPY common-library/pom.xml common-library/pom.xml
-COPY auth-service/pom.xml auth-service/pom.xml
-COPY common-library/src common-library/src
-COPY auth-service/src auth-service/src
-RUN mvn -pl auth-service -am package -DskipTests
-
+# Stage 2: Runtime Minimal Image
 FROM eclipse-temurin:21-jre-alpine
-
-WORKDIR /opt/sentinel/auth-service
 RUN addgroup -S sentinel && adduser -S sentinel -G sentinel
-
-COPY --from=build /workspace/auth-service/target/auth-service-*.jar app.jar
-
-USER sentinel:sentinel
+WORKDIR /app
+COPY --from=builder /build/auth-service/target/*.jar app.jar
+RUN chown -R sentinel:sentinel /app
+USER sentinel
 EXPOSE 8081
-
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-XX:+ExitOnOutOfMemoryError", "-jar", "app.jar"]
+HEALTHCHECK --interval=15s --timeout=5s --retries=5 CMD wget -qO- http://localhost:8081/actuator/health/readiness | grep UP || exit 1
+ENTRYPOINT ["java", "-XX:+UseG1GC", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]

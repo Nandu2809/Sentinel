@@ -1,0 +1,19 @@
+name: Sentinel Kubernetes Deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-to-k8s:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate Kubernetes Manifests
+        run: |
+          kubectl apply --dry-run=client -f infrastructure/kubernetes/namespace.yaml
+          kubectl apply --dry-run=client -f infrastructure/kubernetes/configmaps/
+          kubectl apply --dry-run=client -f infrastructure/kubernetes/deployments/
+          kubectl apply --dry-run=client -f infrastructure/kubernetes/services/

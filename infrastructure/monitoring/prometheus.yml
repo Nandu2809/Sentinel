@@ -1,0 +1,39 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'sentinel-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['gateway-service:8080']
+
+  - job_name: 'sentinel-auth'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['auth-service:8081']
+
+  - job_name: 'sentinel-monitoring'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['monitoring-service:8082']
+
+  - job_name: 'sentinel-threat'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['threat-service:8083']
+
+  - job_name: 'sentinel-risk'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['risk-service:8084']
+
+  - job_name: 'sentinel-alert'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['alert-service:8085']
+
+  - job_name: 'sentinel-report'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['report-service:8086']
