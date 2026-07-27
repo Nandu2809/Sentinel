@@ -1,0 +1,10 @@
+server:
+  port: 0
+
+jwt:
+  secret: dGhpcy1pcy1hLXNlY3VyZS10ZXN0LWp3dC1zZWNyZXQtc3RyaW5nLXRvLXBhc3MtdmFsaWRhdGlvbg==
+  issuer: sentinel-auth-service
+
+sentinel:
+  cors:
+    allowed-origins: http://localhost:3000

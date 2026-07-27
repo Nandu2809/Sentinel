@@ -62,10 +62,32 @@ services:
     networks:
       - sentinel-net
 
+  gateway-service:
+    build:
+      context: ../../backend
+      dockerfile: gateway-service/Dockerfile
+    container_name: sentinel-gateway-service
+    depends_on:
+      auth-service:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8080
+      AUTH_SERVICE_URL: http://auth-service:8081
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      SENTINEL_ALLOWED_ORIGINS: ${SENTINEL_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health/readiness | grep UP"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks:
+      - sentinel-net
+
 volumes:
   postgres_data:
 
 networks:
   sentinel-net:
     driver: bridge
-
