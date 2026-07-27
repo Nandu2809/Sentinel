@@ -1,185 +1,118 @@
-# Sentinel Security Platform
+# Sentinel – Intelligent API Security & Threat Monitoring Platform
 
-Sentinel is an enterprise-grade, AI-ready API security, identity governance, and real-time threat monitoring platform designed for high-throughput cloud environments.
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.5-green)
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Cloud--Native-blue)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
----
+**Sentinel** is an enterprise-grade, hybrid security intelligence platform designed to protect microservice architectures from API abuse, signature-based OWASP threats, zero-day vulnerabilities, and behavioral anomalies. 
 
-## Table of Contents
-
-- [Project Overview](#project-overview)
-- [Architecture](#architecture)
-- [Repository Structure](#repository-structure)
-- [Technology Stack](#technology-stack)
-- [Getting Started](#getting-started)
-- [Build Instructions](#build-instructions)
-- [Roadmap](#roadmap)
-- [License](#license)
+Combining **Java 21 Spring Boot 3.x** microservices with a **Python 3.12 FastAPI Machine Learning Anomaly Engine**, Sentinel delivers real-time API monitoring, automated risk scoring, multi-channel SOC alerting, and explainable AI insights.
 
 ---
 
-## Project Overview
+## 🏗️ Platform Architecture
 
-Sentinel offers a unified defense ecosystem against modern API security vulnerabilities, automated bot attacks, unauthorized data access, and suspicious access anomalies.
-
-### Key Capabilities
-- **Authentication & Identity Management**: JWT access token issuance, SHA-256 hashed refresh-token rotation, BCrypt password validation, and granular RBAC.
-- **Audit Event Logging**: Comprehensive security event tracking with structured payload metadata and persistence.
-- **AI Threat Engine**: Anomaly detection and real-time telemetry analysis for suspicious activity scoring.
-- **Enterprise Infrastructure**: Microservices-ready design with Docker Compose, Kubernetes orchestration schemas, and Prometheus/Grafana monitoring targets.
-
----
-
-## Architecture
-
-Sentinel is organized as a domain-driven monorepo separating runtime microservices, frontend dashboards, machine learning engines, and DevOps infrastructure:
-
-```mermaid
-graph TD
-    Client[API Clients / Sentinel Dashboard] --> Gateway[API Gateway / Perimeter Policy]
-    Gateway --> Auth[Auth Service / RBAC]
-    Gateway --> User[User Service]
-    Gateway --> Monitoring[Monitoring Service]
-    Monitoring --> Threat[Threat Service / Detection Rules]
-    Threat --> AI[AI Anomaly Engine]
-    Threat --> Alert[Alert Service]
-    Alert --> Notification[Notification Service]
 ```
-
-Detailed architectural specifications, ADRs, sequence diagrams, and C4 models can be found under [`docs/architecture/`](docs/architecture/SystemDesign/architecture.md).
-
----
-
-## Repository Structure
-
-```text
-Sentinel/
-├── pom.xml                        # Root Aggregator POM
-├── backend/                       # Spring Boot Microservices & Shared Libraries
-│   ├── pom.xml                    # Backend Parent POM
-│   ├── common-library/            # Shared API response, error & security event contracts
-│   ├── auth-service/              # Spring Boot JWT & RBAC Authentication Service
-│   ├── gateway-service/           # Perimeter Gateway & Routing Policies
-│   ├── user-service/              # User Administration Context
-│   ├── monitoring-service/        # API Telemetry Ingestion Context
-│   ├── threat-service/            # Threat Detection & Scoring Engine
-│   ├── alert-service/             # Alert Escalation Policy Manager
-│   ├── notification-service/      # Multi-channel Notification Delivery
-│   ├── report-service/            # Compliance & Analytics Reporting
-│   ├── config-server/             # Future Spring Cloud Config Server
-│   ├── service-discovery/         # Future Service Discovery (Eureka/Consul)
-│   ├── api-gateway/               # Future Unified API Gateway
-│   ├── common-security/           # Future Shared JWT & Security Filter Library
-│   └── shared-kernel/             # Future Shared Domain Models & DTOs
-├── frontend/
-│   └── sentinel-dashboard/        # Sentinel Management Dashboard (Web App)
-├── ai-engine/                     # Machine Learning & Anomaly Detection Pipeline
-│   ├── anomaly-detection/         # Real-time Inference Modules
-│   ├── training/                  # Offline Model Training Scripts
-│   ├── models/                    # Serialized Model Artifacts
-│   ├── datasets/                  # Training & Validation Telemetry Datasets
-│   ├── pipelines/                 # Data Preprocessing & Feature Extraction
-│   ├── experiments/               # Experimentation & Hyperparameter Logs
-│   ├── requirements.txt           # Python ML Dependencies
-│   └── README.md                  # AI Engine Documentation
-├── infrastructure/                # Deployment & DevOps Tooling
-│   ├── docker/                    # Docker Compose Specifications
-│   ├── kubernetes/                # Helm & Manifest Specs
-│   ├── terraform/                 # Infrastructure as Code
-│   ├── monitoring/                # Prometheus & Grafana Rules
-│   └── logging/                   # ELK Stack & Log Aggregation Configs
-├── docs/                          # Enterprise Platform Documentation
-│   ├── architecture/              # ADRs, C4 Models, Sequence Diagrams & Threat Models
-│   ├── api/                       # OpenAPI & Endpoint Specs
-│   ├── deployment/                # Environment Setup & Deployment Guides
-│   ├── database/                  # Schema Migrations & ER Diagrams
-│   ├── security/                  # Security Audits & Compliance Policies
-│   ├── sprints/                   # Sprint Planning & Release Notes
-│   └── user-guide/                # Platform Operator Documentation
-├── .github/
-│   └── workflows/                 # CI/CD GitHub Actions Workflows
-├── scripts/                       # Operational & Helper Scripts
-├── .env.example                   # Environment Variables Specification
-├── .gitignore                     # Git Exclusion Rules
-├── LICENSE                        # MIT License
-└── README.md                      # Platform Architecture Documentation
+ +---------------------------------------------------------------------------------------------------------+
+ |                                          ENTERPRISE TRAFFIC                                             |
+ |                               (HTTPS / TLS 1.3 via NGINX Ingress Controller)                            |
+ +---------------------------------------------------------------------------------------------------------+
+                                                       |
+                                                       v
+ +---------------------------------------------------------------------------------------------------------+
+ |                                  KUBERNETES NAMESPACE: sentinel-system                                  |
+ |                                                                                                         |
+ |  [1. API Gateway Service] ──> gateway-service:8080 (Redis Rate Limiting & JWT Validation)              |
+ |                                                                                                         |
+ |  [2. Security Microservice Reactor]                                                                     |
+ |   ├── auth-service:8081        (Identity Provider, JWT, BCrypt, RBAC)                               |
+ |   ├── monitoring-service:8082  (API Traffic Collection, Metrics Aggregation)                            |
+ |   ├── threat-service:8083      (Rule Engine, OWASP Signatures, Threat Events)                          |
+ |   ├── risk-service:8084        (Multi-Factor Risk Scoring, Security Score 0-100)                      |
+ |   ├── alert-service:8085       (SOC Alert Lifecycle, WebSocket/Email, SLA Escalation)                  |
+ |   └── report-service:8086      (Dashboard Summary APIs, PDF/CSV/JSON Exporters)                       |
+ |                                                                                                         |
+ |  [3. AI Anomaly Engine (ai-engine/)]                                                                    |
+ |   └── ai-engine:8000           (FastAPI, Isolation Forest, One-Class SVM, DBSCAN, XAI Explainer)       |
+ |                                                                                                         |
+ |  [4. Stateful Infrastructure]                                                                           |
+ |   ├── PostgreSQL 16            (Relational Storage & Flyway Migrations)                                 |
+ |   ├── Redis 7                  (Distributed Cache & Token Bucket Rate Limiting)                         |
+ |   └── Apache Kafka & Zookeeper (Real-Time Asynchronous Event Bus)                                      |
+ +---------------------------------------------------------------------------------------------------------+
 ```
 
 ---
 
-## Technology Stack
+## ✨ Key Features
 
-- **Backend**: Java 21, Spring Boot 3.3.5, Spring Security, Spring Data JPA, Flyway, PostgreSQL 16, Redis 7, JUnit 5, Testcontainers.
-- **AI & Analytics**: Python 3.11+, PyTorch, Scikit-Learn, Pandas, NumPy, FastAPI.
-- **DevOps & Infrastructure**: Maven 3.9+, Docker Compose, Kubernetes, GitHub Actions CI/CD.
+- **Hybrid Threat Intelligence**: Signature-based OWASP rule evaluation fused with AI behavioral anomaly detection.
+- **Multi-Factor Risk Scoring Engine**: Calculates real-time entity risk profiles for Users, Endpoints, and IPs.
+- **SOC Alert Lifecycle & SLA Escalation**: Automated lifecycle state machine (`NEW` -> `ACKNOWLEDGED` -> `RESOLVED` -> `CLOSED`) with background cron SLA escalation.
+- **Explainable AI (XAI)**: Generates human-readable primary detection reasons and feature attribution metrics.
+- **Executive Security Dashboards**: High-throughput REST APIs supplying real-time metrics for Angular dashboards.
+- **Automated Report Exporter**: PDF, CSV, and JSON security posture reports.
+- **Post-Quantum Cryptography (PQC) Ready**: Architectural migration path for NIST FIPS 203 (ML-KEM) and FIPS 204 (ML-DSA).
 
 ---
 
-## Getting Started
+## 🛠️ Technology Stack
 
-### Prerequisites
+- **Backend**: Java 21, Spring Boot 3.3.5, Spring Cloud Gateway, Spring Security, Spring Data JPA, Flyway, Micrometer, Actuator, OpenAPI.
+- **AI Engine**: Python 3.12, FastAPI, Scikit-learn, Pandas, NumPy, Joblib, Pytest.
+- **Databases & Event Bus**: PostgreSQL 16, Redis 7, Apache Kafka.
+- **Containerization & Orchestration**: Docker, Kubernetes, Helm, NGINX Ingress, HPA.
+- **DevSecOps & CI/CD**: GitHub Actions, Trivy, Gitleaks, OWASP Dependency Check, Prometheus, Grafana, ELK Stack.
 
-- **Java Development Kit**: JDK 21+
-- **Build Tool**: Apache Maven 3.9+
-- **Container Runtime**: Docker & Docker Compose
+---
 
-### Environment Configuration
+## 🚀 Quick Start & Deployment
 
-Copy `.env.example` to create local environment variables:
-
+### Local Docker Spin-Up
 ```bash
+# 1. Clone repository
+git clone https://github.com/madugundunanda-ui/Sentinel.git
+cd Sentinel
+
+# 2. Configure Environment Template
 cp .env.example .env
+
+# 3. Launch Platform via Docker Compose
+docker compose -f infrastructure/docker/docker-compose.yml up --build -d
 ```
 
-Configure strong database passwords and a valid `JWT_SECRET` (at least 32 bytes).
+### Kubernetes Production Deployment
+```bash
+kubectl apply -f infrastructure/kubernetes/namespace.yaml
+kubectl apply -f infrastructure/kubernetes/configmaps/
+kubectl apply -f infrastructure/kubernetes/secrets/
+kubectl apply -f infrastructure/kubernetes/persistent-volumes/
+kubectl apply -f infrastructure/kubernetes/deployments/
+kubectl apply -f infrastructure/kubernetes/services/
+kubectl apply -f infrastructure/kubernetes/ingress/
+kubectl apply -f infrastructure/kubernetes/autoscaling/
+```
 
 ---
 
-## Build Instructions
+## 📖 Documentation Directory
 
-### 1. Compile & Verify Full Monorepo (Root Aggregator)
-
-```powershell
-mvn clean verify
-```
-
-### 2. Compile & Install Backend Services Only
-
-```powershell
-cd backend
-mvn clean install
-```
-
-### 3. Run Auth Service Locally
-
-```powershell
-# Using helper script:
-.\scripts\run-auth-service.ps1
-
-# Or via Maven:
-cd backend
-mvn -pl auth-service -am spring-boot:run
-```
-
-### 4. Run With Docker Compose
-
-```powershell
-docker compose -f infrastructure/docker/docker-compose.yml --env-file .env up --build
-```
-
-Access Swagger UI documentation at `http://localhost:8081/swagger-ui/index.html`.
+- 📐 [Architecture Guide](docs/deployment/architecture.md)
+- 🐳 [Docker Deployment Guide](docs/deployment/docker-guide.md)
+- ☸️ [Kubernetes Operations Guide](docs/deployment/kubernetes-guide.md)
+- 🔄 [CI/CD Workflows](docs/deployment/ci-cd-guide.md)
+- 📊 [Monitoring & Prometheus Guide](docs/deployment/monitoring-guide.md)
+- 🛡️ [DevSecOps Security Controls](docs/deployment/security-guide.md)
+- 🔒 [Security Audit Report](docs/security/security-audit-report.md)
+- 🎯 [Penetration Testing Framework](docs/security/penetration-testing-report.md)
+- ⚛️ [Post-Quantum Readiness Architecture](docs/security/post-quantum-readiness.md)
+- ⚡ [Performance & Load Test Benchmarks](docs/performance/performance-report.md)
+- 📄 [Production Readiness Report](docs/production-readiness-report.md)
 
 ---
 
-## Roadmap
-
-- [x] **Sprint 1**: Auth Service bounded context, JWT authentication, RBAC, Flyway migrations, and monorepo restructuring.
-- [ ] **Sprint 2**: Gateway Service routing, rate limiting policies, and token relay integration.
-- [ ] **Sprint 3**: Telemetry ingestion pipeline and Monitoring Service.
-- [ ] **Sprint 4**: AI Threat Detection Engine integration with real-time scoring.
-- [ ] **Sprint 5**: Alerting escalation, notification dispatchers, and frontend dashboard launch.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+## 📜 License
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for details.
