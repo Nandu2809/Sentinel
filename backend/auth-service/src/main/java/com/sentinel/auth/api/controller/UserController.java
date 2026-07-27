@@ -4,6 +4,7 @@ import com.sentinel.auth.api.dto.CreateUserRequest;
 import com.sentinel.auth.api.dto.MessageResponse;
 import com.sentinel.auth.api.dto.UpdateUserRequest;
 import com.sentinel.auth.api.dto.UserResponse;
+import com.sentinel.auth.security.JwtPrincipal;
 import com.sentinel.auth.service.RequestMetadata;
 import com.sentinel.auth.service.UserAdministrationService;
 import com.sentinel.common.api.ApiResponse;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,12 @@ public class UserController {
 
     public UserController(UserAdministrationService userAdministrationService) {
         this.userAdministrationService = userAdministrationService;
+    }
+
+    @GetMapping("/me")
+    public ApiResponse<UserResponse> me(@AuthenticationPrincipal JwtPrincipal principal) {
+        return ApiResponse.success(HttpStatus.OK.value(), "Current user retrieved",
+                userAdministrationService.get(UUID.fromString(principal.userId())));
     }
 
     @GetMapping

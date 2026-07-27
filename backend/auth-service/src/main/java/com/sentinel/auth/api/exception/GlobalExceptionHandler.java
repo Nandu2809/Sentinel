@@ -37,8 +37,7 @@ public class GlobalExceptionHandler {
         List<FieldViolation> violations = ex.getBindingResult().getFieldErrors().stream()
                 .map(this::toViolation)
                 .toList();
-        ApiErrorResponse response = new ApiErrorResponse(
-                java.time.Instant.now(),
+        ApiErrorResponse response = ApiErrorResponse.of(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "Request validation failed",
