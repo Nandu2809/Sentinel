@@ -26,6 +26,7 @@
         <module>threat-service</module>
         <module>risk-service</module>
         <module>alert-service</module>
+        <module>report-service</module>
     </modules>
 
     <properties>
