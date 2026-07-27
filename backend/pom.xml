@@ -25,6 +25,7 @@
         <module>monitoring-service</module>
         <module>threat-service</module>
         <module>risk-service</module>
+        <module>alert-service</module>
     </modules>
 
     <properties>
