@@ -7,6 +7,7 @@ import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class GlobalErrorAttributes extends DefaultErrorAttributes {
@@ -16,9 +17,14 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
         Throwable error = getError(request);
         HttpStatus status = determineHttpStatus(error);
 
-        String message = error != null && error.getMessage() != null && !error.getMessage().isBlank()
-                ? error.getMessage()
-                : "An unexpected error occurred at the gateway edge";
+        String message;
+        if (error instanceof ResponseStatusException rse && rse.getReason() != null) {
+            message = rse.getReason();
+        } else if (error != null && error.getMessage() != null && !error.getMessage().isBlank()) {
+            message = error.getMessage();
+        } else {
+            message = "An unexpected error occurred at the gateway edge";
+        }
 
         ApiErrorResponse response = ApiErrorResponse.of(
                 status.value(),
@@ -41,8 +47,11 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
         if (error == null) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
+        if (error instanceof ResponseStatusException rse) {
+            return HttpStatus.valueOf(rse.getStatusCode().value());
+        }
         String errorName = error.getClass().getSimpleName();
-        if (errorName.contains("NotFound") || errorName.contains("ResponseStatusException")) {
+        if (errorName.contains("NotFound")) {
             return HttpStatus.NOT_FOUND;
         }
         if (errorName.contains("ConnectException") || errorName.contains("TimeoutException")) {

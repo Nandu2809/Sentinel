@@ -16,18 +16,23 @@ public class CorrelationIdFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        String correlationId = request.getHeaders().getFirst(CORRELATION_ID_HEADER);
-
+        String correlationId = exchange.getRequest().getHeaders().getFirst(CORRELATION_ID_HEADER);
         if (correlationId == null || correlationId.isBlank()) {
             correlationId = UUID.randomUUID().toString();
         }
 
-        exchange.getAttributes().put(CORRELATION_ID_ATTR, correlationId);
-        exchange.getResponse().getHeaders().add(CORRELATION_ID_HEADER, correlationId);
+        final String finalCorrelationId = correlationId;
+        exchange.getAttributes().put(CORRELATION_ID_ATTR, finalCorrelationId);
 
-        ServerHttpRequest mutatedRequest = request.mutate()
-                .header(CORRELATION_ID_HEADER, correlationId)
+        exchange.getResponse().beforeCommit(() -> {
+            if (!exchange.getResponse().getHeaders().containsKey(CORRELATION_ID_HEADER)) {
+                exchange.getResponse().getHeaders().set(CORRELATION_ID_HEADER, finalCorrelationId);
+            }
+            return Mono.empty();
+        });
+
+        ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
+                .header(CORRELATION_ID_HEADER, finalCorrelationId)
                 .build();
 
         return chain.filter(exchange.mutate().request(mutatedRequest).build());
@@ -35,6 +40,6 @@ public class CorrelationIdFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return -100;
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 }
