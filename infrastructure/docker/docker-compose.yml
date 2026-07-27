@@ -1,4 +1,4 @@
-﻿services:
+services:
   postgres:
     image: postgres:16-alpine
     container_name: sentinel-postgres
@@ -34,7 +34,7 @@
 
   auth-service:
     build:
-      context: ..
+      context: ../../backend
       dockerfile: auth-service/Dockerfile
     container_name: sentinel-auth-service
     depends_on:

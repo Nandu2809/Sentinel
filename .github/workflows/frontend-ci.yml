@@ -1,0 +1,25 @@
+name: Sentinel Frontend CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
+
+jobs:
+  frontend-ci-placeholder:
+    name: Frontend CI Pipeline (Placeholder)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Placeholder Check
+        run: echo "Frontend CI pipeline configured for future Node/React/Angular builds."

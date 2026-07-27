@@ -1,0 +1,23 @@
+name: Docker Build & Verification
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'infrastructure/docker/**'
+      - 'backend/**'
+      - '.github/workflows/docker-build.yml'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  docker-build-placeholder:
+    name: Docker Image Build (Placeholder)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Docker Compose Config
+        run: docker compose -f infrastructure/docker/docker-compose.yml config

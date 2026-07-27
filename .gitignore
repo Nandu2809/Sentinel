@@ -1,11 +1,41 @@
+# Maven & Java
 target/
+**/target/
+*.class
+
+# IDEs & Editors
 .idea/
 .vscode/
 *.iml
-*.log
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# Environment & Secrets
 .env
 .env.*
 !.env.example
-docker/postgres/data/
-docker/redis/data/
 
+# Infrastructure & Persistent Volumes
+infrastructure/docker/postgres/data/
+infrastructure/docker/redis/data/
+
+# Python & AI Engine
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.ipynb_checkpoints/
+
+# Node & Frontend
+node_modules/
+dist/
+build/
+.next/
+
+# Logs
+*.log
+logs/
