@@ -73,9 +73,17 @@ services:
         condition: service_healthy
     environment:
       SERVER_PORT: 8081
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-sentinel_db}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: sentinel_db?currentSchema=auth
+      POSTGRES_USER: ${POSTGRES_USER:-sentinel_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sentinel_db?currentSchema=auth
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-sentinel_admin}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_FLYWAY_SCHEMAS: auth
+      SPRING_FLYWAY_CREATE_SCHEMAS: "true"
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       JWT_SECRET: ${JWT_SECRET:-change-me-very-long-secret-key-2026!}
       SENTINEL_ALLOWED_ORIGINS: ${SENTINEL_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
     ports:
@@ -102,7 +110,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-change-me-very-long-secret-key-2026!}
       SENTINEL_ALLOWED_ORIGINS: ${SENTINEL_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
     ports:
-      - "8080:8080"
+      - "8088:8080"
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health/readiness | grep UP || exit 1"]
       interval: 15s
@@ -121,9 +129,18 @@ services:
         condition: service_healthy
     environment:
       SERVER_PORT: 8082
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-sentinel_db}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: sentinel_db?currentSchema=monitoring
+      POSTGRES_USER: ${POSTGRES_USER:-sentinel_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sentinel_db?currentSchema=monitoring
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-sentinel_admin}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_FLYWAY_SCHEMAS: monitoring
+      SPRING_FLYWAY_CREATE_SCHEMAS: "true"
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     ports:
       - "8082:8082"
     healthcheck:
@@ -144,9 +161,18 @@ services:
         condition: service_healthy
     environment:
       SERVER_PORT: 8083
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-sentinel_db}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: sentinel_db?currentSchema=threat
+      POSTGRES_USER: ${POSTGRES_USER:-sentinel_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sentinel_db?currentSchema=threat
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-sentinel_admin}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_FLYWAY_SCHEMAS: threat
+      SPRING_FLYWAY_CREATE_SCHEMAS: "true"
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     ports:
       - "8083:8083"
     healthcheck:
@@ -167,9 +193,18 @@ services:
         condition: service_healthy
     environment:
       SERVER_PORT: 8084
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-sentinel_db}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: sentinel_db?currentSchema=risk
+      POSTGRES_USER: ${POSTGRES_USER:-sentinel_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sentinel_db?currentSchema=risk
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-sentinel_admin}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_FLYWAY_SCHEMAS: risk
+      SPRING_FLYWAY_CREATE_SCHEMAS: "true"
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     ports:
       - "8084:8084"
     healthcheck:
@@ -190,9 +225,18 @@ services:
         condition: service_healthy
     environment:
       SERVER_PORT: 8085
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-sentinel_db}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: sentinel_db?currentSchema=alert
+      POSTGRES_USER: ${POSTGRES_USER:-sentinel_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sentinel_db?currentSchema=alert
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-sentinel_admin}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_FLYWAY_SCHEMAS: alert
+      SPRING_FLYWAY_CREATE_SCHEMAS: "true"
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     ports:
       - "8085:8085"
     healthcheck:
@@ -215,11 +259,20 @@ services:
         condition: service_healthy
     environment:
       SERVER_PORT: 8086
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-sentinel_db}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: sentinel_db?currentSchema=report
+      POSTGRES_USER: ${POSTGRES_USER:-sentinel_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sentinel_db?currentSchema=report
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-sentinel_admin}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-change-me-strong-pass-2026!}
+      SPRING_FLYWAY_SCHEMAS: report
+      SPRING_FLYWAY_CREATE_SCHEMAS: "true"
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     ports:
       - "8086:8086"
     healthcheck:

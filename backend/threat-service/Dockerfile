@@ -1,10 +1,21 @@
 # Stage 1: Build Jar artifact
 FROM maven:3.9.8-eclipse-temurin-21-alpine AS builder
 WORKDIR /build
+
 COPY pom.xml .
-COPY common-library common-library
-COPY threat-service threat-service
-RUN mvn clean package -pl common-library,threat-service -am -DskipTests
+COPY common-library/pom.xml common-library/pom.xml
+COPY auth-service/pom.xml auth-service/pom.xml
+COPY gateway-service/pom.xml gateway-service/pom.xml
+COPY monitoring-service/pom.xml monitoring-service/pom.xml
+COPY threat-service/pom.xml threat-service/pom.xml
+COPY risk-service/pom.xml risk-service/pom.xml
+COPY alert-service/pom.xml alert-service/pom.xml
+COPY report-service/pom.xml report-service/pom.xml
+
+RUN mvn dependency:go-offline -B
+
+COPY . .
+RUN mvn clean package -pl threat-service -am -DskipTests
 
 # Stage 2: Runtime Minimal Image
 FROM eclipse-temurin:21-jre-alpine
