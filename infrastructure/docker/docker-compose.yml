@@ -34,6 +34,15 @@ services:
     networks:
       - sentinel-net
 
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: sentinel-mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - sentinel-net
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0
     container_name: sentinel-zookeeper
@@ -223,6 +232,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      mailpit:
+        condition: service_started
     environment:
       SERVER_PORT: 8085
       POSTGRES_HOST: postgres
@@ -236,6 +247,10 @@ services:
       SPRING_FLYWAY_SCHEMAS: alert
       SPRING_FLYWAY_CREATE_SCHEMAS: "true"
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
+      SPRING_MAIL_HOST: mailpit
+      SPRING_MAIL_PORT: 1025
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     ports:
       - "8085:8085"
@@ -272,6 +287,7 @@ services:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-change-me-redis-pass!}
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     ports:
       - "8086:8086"
