@@ -68,7 +68,7 @@ public class AuthService {
         user.activate();
         UserEntity saved = userRepository.save(user);
         auditEventService.record(saved.getId(), SecurityEventType.USER_REGISTERED, AuditOutcome.SUCCESS, metadata,
-                "User", saved.getId().toString(), "User registered");
+                "User", saved.getEmail(), "User registered");
         return issueTokens(saved, metadata);
     }
 
@@ -85,13 +85,13 @@ public class AuthService {
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             user.markLoginFailed(MAX_FAILED_LOGIN_ATTEMPTS);
             auditEventService.record(user.getId(), SecurityEventType.LOGIN_FAILED, AuditOutcome.FAILURE, metadata,
-                    "User", user.getId().toString(), "Invalid credentials");
+                    "User", user.getEmail(), "Invalid credentials");
             throw new BusinessException(ErrorCode.INVALID_CREDENTIALS, "Invalid email or password");
         }
 
         user.markLoginSucceeded();
         auditEventService.record(user.getId(), SecurityEventType.LOGIN_SUCCEEDED, AuditOutcome.SUCCESS, metadata,
-                "User", user.getId().toString(), "Login succeeded");
+                "User", user.getEmail(), "Login succeeded");
         return issueTokens(user, metadata);
     }
 
@@ -102,7 +102,7 @@ public class AuthService {
         String newRefreshToken = refreshTokenService.rotate(rawRefreshToken, user, metadata.ipAddress());
         String accessToken = jwtTokenService.createAccessToken(user);
         auditEventService.record(user.getId(), SecurityEventType.TOKEN_REFRESHED, AuditOutcome.SUCCESS, metadata,
-                "User", user.getId().toString(), "Access token refreshed");
+                "User", user.getEmail(), "Access token refreshed");
         return new AuthResponse(accessToken, newRefreshToken, "Bearer", jwtTokenService.accessTokenTtlSeconds(),
                 mapper.toUserResponse(user));
     }
@@ -112,7 +112,7 @@ public class AuthService {
         UserEntity user = getUser(userId);
         refreshTokenService.revokeAll(user, metadata.ipAddress());
         auditEventService.record(user.getId(), SecurityEventType.LOGOUT, AuditOutcome.SUCCESS, metadata,
-                "User", user.getId().toString(), "User logged out");
+                "User", user.getEmail(), "User logged out");
     }
 
     @Transactional
@@ -121,13 +121,13 @@ public class AuthService {
         UserEntity user = getUser(userId);
         if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
             auditEventService.record(user.getId(), SecurityEventType.LOGIN_FAILED, AuditOutcome.FAILURE, metadata,
-                    "User", user.getId().toString(), "Invalid current password");
+                    "User", user.getEmail(), "Invalid current password");
             throw new BusinessException(ErrorCode.INVALID_CREDENTIALS, "Current password is invalid");
         }
         user.changePassword(passwordEncoder.encode(request.newPassword()));
         refreshTokenService.revokeAll(user, metadata.ipAddress());
         auditEventService.record(user.getId(), SecurityEventType.PASSWORD_CHANGED, AuditOutcome.SUCCESS, metadata,
-                "User", user.getId().toString(), "Password changed");
+                "User", user.getEmail(), "Password changed");
     }
 
     public void requestPasswordReset(ForgotPasswordRequest request, RequestMetadata metadata) {
