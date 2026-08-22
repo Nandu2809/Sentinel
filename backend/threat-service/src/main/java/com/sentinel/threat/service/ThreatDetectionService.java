@@ -1,10 +1,12 @@
 package com.sentinel.threat.service;
 
 import com.sentinel.common.events.SecurityEventEnvelope;
+import com.sentinel.common.events.ThreatEventEnvelope;
 import com.sentinel.common.security.SecurityEventType;
 import com.sentinel.threat.domain.entity.ThreatEventEntity;
 import com.sentinel.threat.domain.model.ThreatSeverity;
 import com.sentinel.threat.domain.model.ThreatType;
+import com.sentinel.threat.event.KafkaThreatEventPublisher;
 import com.sentinel.threat.repository.ThreatEventRepository;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -24,10 +26,12 @@ public class ThreatDetectionService {
     private static final long TIME_WINDOW_MINUTES = 5;
 
     private final ThreatEventRepository threatEventRepository;
+    private final KafkaThreatEventPublisher publisher;
     private final Map<String, Queue<Instant>> failedAttemptsMap = new ConcurrentHashMap<>();
 
-    public ThreatDetectionService(ThreatEventRepository threatEventRepository) {
+    public ThreatDetectionService(ThreatEventRepository threatEventRepository, KafkaThreatEventPublisher publisher) {
         this.threatEventRepository = threatEventRepository;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -67,8 +71,23 @@ public class ThreatDetectionService {
                     now
             );
 
-            threatEventRepository.save(threat);
+            ThreatEventEntity saved = threatEventRepository.save(threat);
             log.info("THREAT_DETECTED type=BRUTE_FORCE_ATTACK riskScore=85 user={} ip={}", userKey, event.ipAddress());
+
+            if (publisher != null) {
+                publisher.publish(new ThreatEventEnvelope(
+                        saved.getId(),
+                        event.eventId(),
+                        "BRUTE_FORCE_ATTACK",
+                        "HIGH",
+                        event.userId(),
+                        event.email() != null ? event.email() : userKey,
+                        event.ipAddress(),
+                        saved.getRecommendation(),
+                        85.0,
+                        now
+                ));
+            }
         }
     }
 
@@ -90,9 +109,24 @@ public class ThreatDetectionService {
                         now
                 );
 
-                threatEventRepository.save(threat);
+                ThreatEventEntity saved = threatEventRepository.save(threat);
                 log.info("THREAT_DETECTED type=SUSPICIOUS_LOGIN riskScore=60 user={} ip={}", userKey, event.ipAddress());
                 failedAttemptsMap.remove(userKey);
+
+                if (publisher != null) {
+                    publisher.publish(new ThreatEventEnvelope(
+                            saved.getId(),
+                            event.eventId(),
+                            "SUSPICIOUS_LOGIN",
+                            "MEDIUM",
+                            event.userId(),
+                            event.email() != null ? event.email() : userKey,
+                            event.ipAddress(),
+                            saved.getRecommendation(),
+                            60.0,
+                            now
+                    ));
+                }
             }
         }
     }
