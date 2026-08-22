@@ -151,6 +151,7 @@ services:
       SPRING_FLYWAY_CREATE_SCHEMAS: "true"
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     ports:
       - "8082:8082"
     healthcheck:

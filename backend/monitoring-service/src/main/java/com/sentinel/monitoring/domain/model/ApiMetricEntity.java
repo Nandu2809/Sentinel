@@ -21,22 +21,22 @@ public class ApiMetricEntity {
     @JoinColumn(name = "api_id", nullable = false)
     private ApiEntity api;
 
-    @Column(nullable = false)
+    @Column(name = "time_bucket", nullable = false)
     private Instant timeBucket;
 
-    @Column(nullable = false)
+    @Column(name = "request_count", nullable = false)
     private long requestCount;
 
-    @Column(nullable = false)
+    @Column(name = "error_count", nullable = false)
     private long errorCount;
 
-    @Column(nullable = false)
+    @Column(name = "avg_latency_ms", nullable = false)
     private double avgLatencyMs;
 
-    @Column(nullable = false)
+    @Column(name = "p99_latency_ms", nullable = false)
     private double p99LatencyMs;
 
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     protected ApiMetricEntity() {
