@@ -71,6 +71,25 @@ public class ThreatEventEntity {
     protected ThreatEventEntity() {
     }
 
+    public ThreatEventEntity(UUID eventId, ThreatType threatType, ThreatSeverity severity, String userId,
+                             String clientIp, String recommendation, double riskScore, Instant createdAt) {
+        this.id = UUID.randomUUID();
+        this.threatCode = "THR-" + UUID.randomUUID().toString().substring(0, 8);
+        this.correlationId = eventId != null ? eventId.toString() : UUID.randomUUID().toString();
+        this.requestId = eventId != null ? eventId.toString() : UUID.randomUUID().toString();
+        this.userId = userId;
+        this.clientIp = clientIp != null ? clientIp : "UNKNOWN";
+        this.endpoint = "/api/v1/auth";
+        this.httpMethod = "POST";
+        this.threatType = threatType;
+        this.matchedRule = null;
+        this.severity = severity;
+        this.riskScore = riskScore;
+        this.recommendation = recommendation;
+        this.status = ThreatStatus.NEW;
+        this.createdAt = createdAt != null ? createdAt : Instant.now();
+    }
+
     public ThreatEventEntity(String threatCode, String correlationId, String requestId, String userId,
                              String clientIp, String endpoint, String httpMethod, ThreatType threatType,
                              ThreatRuleEntity matchedRule, ThreatSeverity severity, double riskScore,
