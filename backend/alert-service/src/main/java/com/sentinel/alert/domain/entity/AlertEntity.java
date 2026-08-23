@@ -65,6 +65,18 @@ public class AlertEntity {
     @Column(length = 80)
     private String assignedAnalyst;
 
+    @Column(name = "event_id")
+    private UUID eventId;
+
+    @Column(name = "user_id")
+    private UUID userId;
+
+    @Column(name = "alert_type", length = 80)
+    private String alertType;
+
+    @Column(name = "message", length = 512)
+    private String message;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private AlertStatus status;
@@ -73,6 +85,25 @@ public class AlertEntity {
     private String resolutionNotes;
 
     protected AlertEntity() {
+    }
+
+    public AlertEntity(UUID eventId, UUID userId, String alertType, AlertSeverity severity,
+                       double riskScore, String message, AlertStatus status, Instant createdAt) {
+        this.id = UUID.randomUUID();
+        this.eventId = eventId;
+        this.userId = userId;
+        this.alertCode = "ALT-" + UUID.randomUUID().toString().substring(0, 8);
+        this.title = "Security Alert: " + (alertType != null ? alertType : "Threat Detected");
+        this.description = message;
+        this.message = message;
+        this.alertType = alertType;
+        this.threatType = alertType != null ? alertType : "SECURITY_ALERT";
+        this.severity = severity;
+        this.riskScore = riskScore;
+        this.sourceService = "RISK_SERVICE";
+        this.status = status != null ? status : AlertStatus.OPEN;
+        this.createdAt = createdAt != null ? createdAt : Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     public AlertEntity(String alertCode, String title, String description, String threatType,
@@ -143,6 +174,22 @@ public class AlertEntity {
 
     public String getThreatType() {
         return threatType;
+    }
+
+    public UUID getEventId() {
+        return eventId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public String getAlertType() {
+        return alertType != null ? alertType : threatType;
+    }
+
+    public String getMessage() {
+        return message != null ? message : description;
     }
 
     public AlertSeverity getSeverity() {

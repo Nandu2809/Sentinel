@@ -1,8 +1,10 @@
 package com.sentinel.risk.service;
 
+import com.sentinel.common.events.AlertEventEnvelope;
 import com.sentinel.common.events.RiskEventEnvelope;
 import com.sentinel.common.events.ThreatEventEnvelope;
 import com.sentinel.risk.domain.entity.RiskAssessmentEntity;
+import com.sentinel.risk.event.KafkaAlertEventPublisher;
 import com.sentinel.risk.event.KafkaRiskEventPublisher;
 import com.sentinel.risk.repository.RiskAssessmentRepository;
 import java.time.Instant;
@@ -17,10 +19,14 @@ public class RiskCalculationService {
 
     private final RiskAssessmentRepository riskAssessmentRepository;
     private final KafkaRiskEventPublisher riskEventPublisher;
+    private final KafkaAlertEventPublisher alertEventPublisher;
 
-    public RiskCalculationService(RiskAssessmentRepository riskAssessmentRepository, KafkaRiskEventPublisher riskEventPublisher) {
+    public RiskCalculationService(RiskAssessmentRepository riskAssessmentRepository,
+                                  KafkaRiskEventPublisher riskEventPublisher,
+                                  KafkaAlertEventPublisher alertEventPublisher) {
         this.riskAssessmentRepository = riskAssessmentRepository;
         this.riskEventPublisher = riskEventPublisher;
+        this.alertEventPublisher = alertEventPublisher;
     }
 
     @Transactional
@@ -59,6 +65,20 @@ public class RiskCalculationService {
                 decision,
                 Instant.now()
         ));
+
+        if ("HIGH".equalsIgnoreCase(riskLevel) || "CRITICAL".equalsIgnoreCase(riskLevel)) {
+            if (alertEventPublisher != null) {
+                alertEventPublisher.publish(new AlertEventEnvelope(
+                        saved.getId(),
+                        threatEvent.userId(),
+                        threatEvent.threatType() != null ? threatEvent.threatType() : "SECURITY_ALERT",
+                        riskLevel,
+                        finalRiskScore,
+                        "SENTINEL SECURITY ALERT: High risk threat detected (" + threatEvent.threatType() + ") for user " + threatEvent.email() + " with risk score " + finalRiskScore,
+                        Instant.now()
+                ));
+            }
+        }
     }
 
     private int getThreatBonus(String threatType) {
