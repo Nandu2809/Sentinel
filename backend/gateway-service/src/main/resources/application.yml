@@ -18,17 +18,21 @@ spring:
         - id: monitoring-service
           uri: ${MONITORING_SERVICE_URL:http://localhost:8082}
           predicates:
-            - Path=/api/v1/monitor/**,/api/v1/telemetry/**
+            - Path=/api/v1/monitor/**,/api/v1/telemetry/**,/api/v1/security-events/**
         - id: threat-service
           uri: ${THREAT_SERVICE_URL:http://localhost:8083}
           predicates:
-            - Path=/api/v1/threat/**
-        - id: alert-service
-          uri: ${ALERT_SERVICE_URL:http://localhost:8084}
+            - Path=/api/v1/threat/**,/api/v1/threats/**
+        - id: risk-service
+          uri: ${RISK_SERVICE_URL:http://localhost:8084}
           predicates:
-            - Path=/api/v1/alerts/**
+            - Path=/api/v1/risk/**,/api/v1/risks/**
+        - id: alert-service
+          uri: ${ALERT_SERVICE_URL:http://localhost:8085}
+          predicates:
+            - Path=/api/v1/alerts/**,/api/v1/alert/**
         - id: report-service
-          uri: ${REPORT_SERVICE_URL:http://localhost:8085}
+          uri: ${REPORT_SERVICE_URL:http://localhost:8086}
           predicates:
             - Path=/api/v1/reports/**
 
@@ -38,7 +42,7 @@ jwt:
 
 sentinel:
   cors:
-    allowed-origins: ${SENTINEL_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:5173}
+    allowed-origins: ${SENTINEL_ALLOWED_ORIGINS:http://localhost:4200,http://localhost:3000,http://localhost:5173}
 
 management:
   endpoints:
