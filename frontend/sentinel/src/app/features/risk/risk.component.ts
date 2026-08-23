@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RiskService } from '../../core/services/risk.service';
+import { AIService } from '../../core/services/ai.service';
 import { RiskGaugeComponent } from '../../shared/components/risk-gauge/risk-gauge.component';
 
 @Component({
@@ -10,9 +11,65 @@ import { RiskGaugeComponent } from '../../shared/components/risk-gauge/risk-gaug
   template: `
     <div class="space-y-5">
       <div>
-        <h1 class="text-lg font-semibold text-ink">User Risk Intelligence Center</h1>
-        <p class="mono-label mt-1">Risk Intelligence Engine — composite behavioral scoring</p>
+        <h1 class="text-lg font-semibold text-ink">User Risk & AI Behavioral Intelligence Center</h1>
+        <p class="mono-label mt-1">Sentinel AI Engine — Anomaly Detection & Adaptive Risk Scoring</p>
       </div>
+
+      <!-- AI Threat Intelligence Panel -->
+      @if (aiIntel(); as ai) {
+        <div class="bracket p-5 bg-void-800/40 border-signal-intel/40">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              <h2 class="text-sm font-semibold text-ink uppercase tracking-wider">AI Threat Intelligence Panel</h2>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="mono-label text-[11px]">AI Confidence: <strong class="text-cyan-400 font-mono">{{ ai.aiConfidence }}%</strong></span>
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold"
+                    [class]="ai.behaviorStatus === 'ABNORMAL' ? 'bg-red-950 text-red-400 border border-red-800' : 'bg-emerald-950 text-emerald-400 border border-emerald-800'">
+                STATUS: {{ ai.behaviorStatus }}
+              </span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-void-900/60 rounded border border-void-700 mb-4">
+            <div class="text-xs text-ink-muted mono-label mb-1">Primary Behavioral Reason:</div>
+            <div class="text-sm text-cyan-200 font-mono">{{ ai.reason }}</div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div class="mono-label text-[11px] mb-2 text-ink-dim">Behavioral Risk Factors</div>
+              <div class="space-y-2">
+                @for (f of ai.factors; track f.name) {
+                  <div class="flex items-center justify-between text-xs p-2 bg-void-900/40 rounded border border-void-700/50">
+                    <span class="text-ink font-mono">{{ f.name }}</span>
+                    <span class="font-mono text-cyan-400 font-semibold">{{ f.impact }} ({{ f.score }})</span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div>
+              <div class="mono-label text-[11px] mb-2 text-ink-dim">Location Anomaly Timeline</div>
+              <div class="space-y-2">
+                @for (item of ai.timeline; track item.timestamp) {
+                  <div class="flex items-center justify-between text-xs p-2 bg-void-900/40 rounded border border-void-700/50">
+                    <div class="flex items-center gap-2">
+                      <span class="font-mono text-ink-dim">{{ item.timestamp }}</span>
+                      <span class="text-ink font-mono">{{ item.location }}</span>
+                    </div>
+                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded"
+                          [class]="item.status === 'SAFE' ? 'text-emerald-400 bg-emerald-950/60' : 'text-red-400 bg-red-950/60'">
+                      {{ item.status }}
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
 
       @if (profile(); as p) {
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -72,5 +129,8 @@ import { RiskGaugeComponent } from '../../shared/components/risk-gauge/risk-gaug
 })
 export class RiskComponent {
   private riskService = inject(RiskService);
+  private aiService = inject(AIService);
+
   profile = toSignal(this.riskService.getUserRisk(), { initialValue: null });
+  aiIntel = this.aiService.intelligence;
 }

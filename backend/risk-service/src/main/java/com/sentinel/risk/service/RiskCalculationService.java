@@ -1,5 +1,6 @@
 package com.sentinel.risk.service;
 
+import com.sentinel.common.events.AIThreatEventEnvelope;
 import com.sentinel.common.events.AlertEventEnvelope;
 import com.sentinel.common.events.RiskEventEnvelope;
 import com.sentinel.common.events.ThreatEventEnvelope;
@@ -75,6 +76,57 @@ public class RiskCalculationService {
                         riskLevel,
                         finalRiskScore,
                         "SENTINEL SECURITY ALERT: High risk threat detected (" + threatEvent.threatType() + ") for user " + threatEvent.email() + " with risk score " + finalRiskScore,
+                        Instant.now()
+                ));
+            }
+        }
+    }
+
+    @Transactional
+    public void evaluateAIThreat(AIThreatEventEnvelope aiEvent) {
+        if (aiEvent == null) {
+            return;
+        }
+
+        int aiBonus = aiEvent.anomalyScore() != null ? (int) Math.round(aiEvent.anomalyScore() * 0.5) : 30;
+        int finalRiskScore = Math.min(100, Math.max(0, 50 + aiBonus));
+
+        String riskLevel = calculateRiskLevel(finalRiskScore);
+        String decision = determineDecision(riskLevel);
+
+        RiskAssessmentEntity entity = new RiskAssessmentEntity(
+                aiEvent.userId(),
+                aiEvent.eventId(),
+                finalRiskScore,
+                riskLevel,
+                decision,
+                Instant.now()
+        );
+
+        RiskAssessmentEntity saved = riskAssessmentRepository.save(entity);
+
+        log.info("AI_RISK_EVALUATED user={} anomalyScore={} finalRiskScore={} riskLevel={} decision={}",
+                aiEvent.email(), aiEvent.anomalyScore(), finalRiskScore, riskLevel, decision);
+
+        riskEventPublisher.publish(new RiskEventEnvelope(
+                saved.getId(),
+                aiEvent.userId(),
+                aiEvent.email(),
+                finalRiskScore,
+                riskLevel,
+                decision,
+                Instant.now()
+        ));
+
+        if ("HIGH".equalsIgnoreCase(riskLevel) || "CRITICAL".equalsIgnoreCase(riskLevel)) {
+            if (alertEventPublisher != null) {
+                alertEventPublisher.publish(new AlertEventEnvelope(
+                        saved.getId(),
+                        aiEvent.userId(),
+                        "AI_ANOMALY_" + (aiEvent.prediction() != null ? aiEvent.prediction() : "BEHAVIORAL"),
+                        riskLevel,
+                        finalRiskScore,
+                        "SENTINEL AI THREAT ALERT: " + (aiEvent.reason() != null ? aiEvent.reason() : "High AI anomaly score detected"),
                         Instant.now()
                 ));
             }

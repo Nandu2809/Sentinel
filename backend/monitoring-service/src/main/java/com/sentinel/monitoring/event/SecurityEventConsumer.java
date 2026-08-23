@@ -3,6 +3,7 @@ package com.sentinel.monitoring.event;
 import com.sentinel.common.events.SecurityEventEnvelope;
 import com.sentinel.monitoring.domain.model.SecurityEventEntity;
 import com.sentinel.monitoring.repository.SecurityEventRepository;
+import com.sentinel.monitoring.websocket.SecurityEventWebSocketHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -14,9 +15,12 @@ public class SecurityEventConsumer {
     private static final Logger log = LoggerFactory.getLogger(SecurityEventConsumer.class);
 
     private final SecurityEventRepository securityEventRepository;
+    private final SecurityEventWebSocketHandler webSocketHandler;
 
-    public SecurityEventConsumer(SecurityEventRepository securityEventRepository) {
+    public SecurityEventConsumer(SecurityEventRepository securityEventRepository,
+                                 SecurityEventWebSocketHandler webSocketHandler) {
         this.securityEventRepository = securityEventRepository;
+        this.webSocketHandler = webSocketHandler;
     }
 
     @KafkaListener(
@@ -41,5 +45,8 @@ public class SecurityEventConsumer {
         );
 
         securityEventRepository.save(entity);
+
+        // Real-time WebSocket broadcast to connected frontend clients
+        webSocketHandler.broadcast(event);
     }
 }

@@ -18,7 +18,7 @@ spring:
         - id: monitoring-service
           uri: ${MONITORING_SERVICE_URL:http://localhost:8082}
           predicates:
-            - Path=/api/v1/monitor/**,/api/v1/telemetry/**,/api/v1/security-events/**
+            - Path=/api/v1/monitor/**,/api/v1/telemetry/**,/api/v1/security-events/**,/ws/security-events/**
         - id: threat-service
           uri: ${THREAT_SERVICE_URL:http://localhost:8083}
           predicates:
@@ -35,6 +35,10 @@ spring:
           uri: ${REPORT_SERVICE_URL:http://localhost:8086}
           predicates:
             - Path=/api/v1/reports/**
+        - id: ai-engine
+          uri: ${AI_ENGINE_URL:http://localhost:8000}
+          predicates:
+            - Path=/api/v1/ai/**
 
 jwt:
   secret: ${JWT_SECRET:replace-with-at-least-32-bytes-of-random-base64-or-text}
