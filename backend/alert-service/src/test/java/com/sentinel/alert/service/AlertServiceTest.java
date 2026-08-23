@@ -29,6 +29,7 @@ class AlertServiceTest {
     @Mock private AlertAssignmentRepository assignmentRepository;
     @Mock private NotificationChannelDispatcher dispatcher;
     @Mock private AlertEventProducer producer;
+    @Mock private com.sentinel.alert.incident.service.IncidentService incidentService;
 
     private final AlertMapper mapper = new AlertMapper();
     private AlertService alertService;
@@ -36,7 +37,7 @@ class AlertServiceTest {
     @BeforeEach
     void setUp() {
         alertService = new AlertService(
-                alertRepository, historyRepository, assignmentRepository, dispatcher, producer, mapper
+                alertRepository, historyRepository, assignmentRepository, dispatcher, producer, mapper, incidentService
         );
     }
 

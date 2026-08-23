@@ -15,6 +15,7 @@ import com.sentinel.alert.dto.ResolveAlertRequest;
 import com.sentinel.alert.events.AlertAcknowledgedEvent;
 import com.sentinel.alert.events.AlertCreatedEvent;
 import com.sentinel.alert.events.AlertResolvedEvent;
+import com.sentinel.alert.incident.service.IncidentService;
 import com.sentinel.alert.mapper.AlertMapper;
 import com.sentinel.alert.notification.service.NotificationChannelDispatcher;
 import com.sentinel.alert.producer.AlertEventProducer;
@@ -40,19 +41,22 @@ public class AlertService {
     private final NotificationChannelDispatcher dispatcher;
     private final AlertEventProducer producer;
     private final AlertMapper mapper;
+    private final IncidentService incidentService;
 
     public AlertService(AlertRepository alertRepository,
                         AlertHistoryRepository historyRepository,
                         AlertAssignmentRepository assignmentRepository,
                         NotificationChannelDispatcher dispatcher,
                         AlertEventProducer producer,
-                        AlertMapper mapper) {
+                        AlertMapper mapper,
+                        IncidentService incidentService) {
         this.alertRepository = alertRepository;
         this.historyRepository = historyRepository;
         this.assignmentRepository = assignmentRepository;
         this.dispatcher = dispatcher;
         this.producer = producer;
         this.mapper = mapper;
+        this.incidentService = incidentService;
     }
 
     @Transactional
@@ -76,6 +80,7 @@ public class AlertService {
         dispatcher.dispatch(saved, NotificationChannel.WEBSOCKET, "ALL");
         if (saved.getSeverity() == AlertSeverity.CRITICAL || saved.getSeverity() == AlertSeverity.HIGH) {
             dispatcher.dispatch(saved, NotificationChannel.EMAIL, "soc-alerts@sentinel.security");
+            incidentService.createIncidentFromAlert(saved);
         }
 
         producer.publishAlertCreated(new AlertCreatedEvent(

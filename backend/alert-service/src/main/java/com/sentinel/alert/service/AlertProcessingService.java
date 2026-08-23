@@ -3,6 +3,7 @@ package com.sentinel.alert.service;
 import com.sentinel.alert.domain.entity.AlertEntity;
 import com.sentinel.alert.domain.model.AlertSeverity;
 import com.sentinel.alert.domain.model.AlertStatus;
+import com.sentinel.alert.incident.service.IncidentService;
 import com.sentinel.alert.repository.AlertRepository;
 import com.sentinel.common.events.AlertEventEnvelope;
 import java.time.Instant;
@@ -17,10 +18,14 @@ public class AlertProcessingService {
 
     private final AlertRepository alertRepository;
     private final EmailNotificationService emailNotificationService;
+    private final IncidentService incidentService;
 
-    public AlertProcessingService(AlertRepository alertRepository, EmailNotificationService emailNotificationService) {
+    public AlertProcessingService(AlertRepository alertRepository,
+                                  EmailNotificationService emailNotificationService,
+                                  IncidentService incidentService) {
         this.alertRepository = alertRepository;
         this.emailNotificationService = emailNotificationService;
+        this.incidentService = incidentService;
     }
 
     @Transactional
@@ -48,6 +53,11 @@ public class AlertProcessingService {
                 saved.getId(), saved.getAlertType(), saved.getSeverity(), saved.getRiskScore());
 
         emailNotificationService.sendAlertEmail(alertEvent);
+
+        // Automatically trigger Incident Creation if CRITICAL or HIGH severity
+        if (severity == AlertSeverity.CRITICAL || severity == AlertSeverity.HIGH) {
+            incidentService.createIncidentFromAlert(saved);
+        }
     }
 
     private AlertSeverity parseSeverity(String severityStr) {
@@ -61,3 +71,4 @@ public class AlertProcessingService {
         }
     }
 }
+

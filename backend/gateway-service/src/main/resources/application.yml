@@ -30,7 +30,7 @@ spring:
         - id: alert-service
           uri: ${ALERT_SERVICE_URL:http://localhost:8085}
           predicates:
-            - Path=/api/v1/alerts/**,/api/v1/alert/**
+            - Path=/api/v1/alerts/**,/api/v1/alert/**,/api/v1/incidents/**,/api/v1/threat-hunting/**
         - id: report-service
           uri: ${REPORT_SERVICE_URL:http://localhost:8086}
           predicates:

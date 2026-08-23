@@ -26,6 +26,24 @@ export const routes: Routes = [
         title: 'Sentinel — Security Operations',
       },
       {
+        path: 'incidents',
+        loadComponent: () =>
+          import('./features/incidents/incidents.component').then((m) => m.IncidentDashboardComponent),
+        title: 'Sentinel — SOC Incident Response',
+      },
+      {
+        path: 'incidents/:id',
+        loadComponent: () =>
+          import('./features/incidents/incident-details.component').then((m) => m.IncidentDetailsComponent),
+        title: 'Sentinel — Incident Investigation Workspace',
+      },
+      {
+        path: 'threat-hunting',
+        loadComponent: () =>
+          import('./features/incidents/threat-hunting.component').then((m) => m.ThreatHuntingComponent),
+        title: 'Sentinel — Threat Hunting Workbench',
+      },
+      {
         path: 'alerts',
         loadComponent: () => import('./features/alerts/alerts.component').then((m) => m.AlertsComponent),
         title: 'Sentinel — Alert Management',

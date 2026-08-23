@@ -10,6 +10,8 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { path: '/dashboard', label: 'Operations', glyph: 'OPS' },
+  { path: '/incidents', label: 'Incidents', glyph: 'INC' },
+  { path: '/threat-hunting', label: 'Hunting', glyph: 'HNT' },
   { path: '/alerts', label: 'Alerts', glyph: 'ALT' },
   { path: '/threats', label: 'Threats', glyph: 'THR' },
   { path: '/risk', label: 'Risk Intel', glyph: 'RSK' },
