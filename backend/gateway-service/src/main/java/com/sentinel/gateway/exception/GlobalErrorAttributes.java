@@ -17,6 +17,7 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
         Throwable error = getError(request);
         HttpStatus status = determineHttpStatus(error);
 
+        org.slf4j.LoggerFactory.getLogger(GlobalErrorAttributes.class).error("gateway_edge_error path={} error={}", request.path(), error != null ? error.toString() : "null", error);
         String message;
         if (error instanceof ResponseStatusException rse && rse.getReason() != null) {
             message = rse.getReason();

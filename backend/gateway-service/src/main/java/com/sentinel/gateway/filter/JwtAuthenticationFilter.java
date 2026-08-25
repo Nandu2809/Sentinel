@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -65,12 +66,19 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             ValidatedClaims claims = jwtValidator.validateToken(token);
             exchange.getAttributes().put(RequestLoggingFilter.USER_ID_ATTR, claims.userId());
 
-            ServerHttpRequest mutatedRequest = request.mutate()
-                    .header("X-User-Id", claims.userId())
-                    .header("X-User-Name", claims.username())
-                    .header("X-User-Roles", String.join(",", claims.roles()))
-                    .header("X-User-Permissions", String.join(",", claims.permissions()))
-                    .build();
+            HttpHeaders mutableHeaders = new HttpHeaders();
+            mutableHeaders.putAll(request.getHeaders());
+            mutableHeaders.set("X-User-Id", claims.userId() != null ? claims.userId() : "");
+            mutableHeaders.set("X-User-Name", claims.username() != null ? claims.username() : "");
+            mutableHeaders.set("X-User-Roles", claims.roles() != null ? String.join(",", claims.roles()) : "");
+            mutableHeaders.set("X-User-Permissions", claims.permissions() != null ? String.join(",", claims.permissions()) : "");
+
+            ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(request) {
+                @Override
+                public HttpHeaders getHeaders() {
+                    return mutableHeaders;
+                }
+            };
 
             return chain.filter(exchange.mutate().request(mutatedRequest).build());
         } catch (JwtValidationException e) {

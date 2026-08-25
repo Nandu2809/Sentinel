@@ -125,6 +125,7 @@ services:
       AI_ENGINE_URL: http://ai-engine:8000
       JWT_SECRET: ${JWT_SECRET:-change-me-very-long-secret-key-2026!}
       SENTINEL_ALLOWED_ORIGINS: http://localhost:4200,http://localhost:3000,http://localhost:5173
+      JAVA_TOOL_OPTIONS: "-Djava.net.preferIPv4Stack=true"
     ports:
       - "8088:8080"
     healthcheck:
