@@ -1,23 +1,23 @@
 package com.sentinel.gateway.filter;
 
 import java.util.UUID;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 @Component
-public class CorrelationIdFilter implements GlobalFilter, Ordered {
+public class CorrelationIdFilter implements WebFilter, Ordered {
     public static final String CORRELATION_ID_HEADER = "X-Correlation-ID";
     public static final String CORRELATION_ID_ATTR = "sentinel.correlation.id";
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         if (exchange.getAttributes().containsKey(CORRELATION_ID_ATTR)) {
             return chain.filter(exchange);
         }
@@ -29,13 +29,7 @@ public class CorrelationIdFilter implements GlobalFilter, Ordered {
 
         final String finalCorrelationId = correlationId;
         exchange.getAttributes().put(CORRELATION_ID_ATTR, finalCorrelationId);
-
-        exchange.getResponse().beforeCommit(() -> {
-            if (!exchange.getResponse().getHeaders().containsKey(CORRELATION_ID_HEADER)) {
-                exchange.getResponse().getHeaders().set(CORRELATION_ID_HEADER, finalCorrelationId);
-            }
-            return Mono.empty();
-        });
+        exchange.getResponse().getHeaders().set(CORRELATION_ID_HEADER, finalCorrelationId);
 
         HttpHeaders mutableHeaders = new HttpHeaders();
         mutableHeaders.putAll(exchange.getRequest().getHeaders());
