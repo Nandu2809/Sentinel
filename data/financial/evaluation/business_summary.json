@@ -1,0 +1,11 @@
+{
+  "best_cost_policy": "COST_OPTIMAL",
+  "baseline_cost": 0.0,
+  "enhanced_cost": 51.0,
+  "cost_difference": -51.0,
+  "cost_reduction_percentage": 0.0,
+  "fraud_recall": 1.0,
+  "false_positive_rate": 0.0,
+  "review_rate": 0.0,
+  "recommended_threshold": 0.05
+}

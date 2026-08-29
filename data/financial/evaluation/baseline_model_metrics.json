@@ -1,0 +1,48 @@
+{
+  "logistic_regression": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "tp": 132,
+    "fp": 0,
+    "tn": 1868,
+    "fn": 0,
+    "fraud_recall": 1.0,
+    "threshold": 0.05,
+    "cm": [
+      [
+        1868,
+        0
+      ],
+      [
+        0,
+        132
+      ]
+    ]
+  },
+  "random_forest": {
+    "precision": 0.9925,
+    "recall": 1.0,
+    "f1": 0.9962,
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "tp": 132,
+    "fp": 1,
+    "tn": 1867,
+    "fn": 0,
+    "fraud_recall": 1.0,
+    "threshold": 0.09,
+    "cm": [
+      [
+        1867,
+        1
+      ],
+      [
+        0,
+        132
+      ]
+    ]
+  }
+}

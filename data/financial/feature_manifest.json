@@ -1,0 +1,256 @@
+{
+  "manifest_version": "1.0.0",
+  "generated_at": "2026-08-29T18:02:36.320497+00:00",
+  "baseline_features": [
+    {
+      "feature_name": "amount",
+      "category": "transaction",
+      "type": "float",
+      "description": "Transaction amount in INR",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "logAmount",
+      "category": "transaction",
+      "type": "float",
+      "description": "Log1p transformed transaction amount",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "accountAgeDays",
+      "category": "account",
+      "type": "int",
+      "description": "Account age in days at transaction time",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "velocity1h",
+      "category": "velocity",
+      "type": "int",
+      "description": "Transactions attempted by user in prior 1 hour",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "failedTxCount24h",
+      "category": "velocity",
+      "type": "int",
+      "description": "Failed transaction attempts in prior 24 hours",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "sharedDeviceAccountCount",
+      "category": "device",
+      "type": "int",
+      "description": "Accounts linked to device in transaction event",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "sharedIpAccountCount",
+      "category": "ip",
+      "type": "int",
+      "description": "Accounts linked to IP in transaction event",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "isNewAccountFlag",
+      "category": "account",
+      "type": "int",
+      "description": "Flag indicating account age <= 7 days",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "highVelocityFlag",
+      "category": "velocity",
+      "type": "int",
+      "description": "Flag indicating velocity1h >= 5",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    }
+  ],
+  "enhanced_features": [
+    {
+      "feature_name": "sharedPaymentAccountCount",
+      "category": "payment",
+      "type": "int",
+      "description": "Accounts linked to payment method up to current event",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "deviceDegree",
+      "category": "relationship",
+      "type": "int",
+      "description": "Degree of device node in entity graph",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "ipDegree",
+      "category": "relationship",
+      "type": "int",
+      "description": "Degree of IP node in entity graph",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "paymentMethodDegree",
+      "category": "relationship",
+      "type": "int",
+      "description": "Degree of payment method node in entity graph",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "merchantDegree",
+      "category": "relationship",
+      "type": "int",
+      "description": "Degree of merchant node in entity graph",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "uniqueDevicesPerUser",
+      "category": "relationship",
+      "type": "int",
+      "description": "Distinct devices linked to user",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "uniqueIpsPerUser",
+      "category": "relationship",
+      "type": "int",
+      "description": "Distinct IPs linked to user",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "uniquePaymentMethodsPerUser",
+      "category": "relationship",
+      "type": "int",
+      "description": "Distinct payment methods linked to user",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "recentSharedDeviceCount",
+      "category": "relationship",
+      "type": "int",
+      "description": "Accounts sharing device in 1-hour window",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "recentSharedIpCount",
+      "category": "relationship",
+      "type": "int",
+      "description": "Accounts sharing IP in 1-hour window",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "recentPaymentReuseCount",
+      "category": "relationship",
+      "type": "int",
+      "description": "Accounts sharing payment method in 24-hour window",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "transactionVelocityOnSharedDevice",
+      "category": "relationship",
+      "type": "int",
+      "description": "Transaction velocity across all accounts on device in 1h window",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "transactionVelocityOnSharedIp",
+      "category": "relationship",
+      "type": "int",
+      "description": "Transaction velocity across all accounts on IP in 1h window",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "deviceClusterSize",
+      "category": "cluster",
+      "type": "int",
+      "description": "2-hop entity cluster size surrounding device node",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "ipClusterSize",
+      "category": "cluster",
+      "type": "int",
+      "description": "2-hop entity cluster size surrounding IP node",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "paymentClusterSize",
+      "category": "cluster",
+      "type": "int",
+      "description": "2-hop entity cluster size surrounding payment reference node",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "multiAccountDeviceFlag",
+      "category": "cluster",
+      "type": "int",
+      "description": "Flag indicating >1 account on device",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "multiAccountIpFlag",
+      "category": "cluster",
+      "type": "int",
+      "description": "Flag indicating >1 account on IP",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "multiAccountPaymentFlag",
+      "category": "cluster",
+      "type": "int",
+      "description": "Flag indicating >1 account on payment reference",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "sharedInfrastructureScore",
+      "category": "cluster",
+      "type": "float",
+      "description": "Composite normalized shared infrastructure abuse score",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "relationshipDensity",
+      "category": "cluster",
+      "type": "float",
+      "description": "Graph edge density in user 2-hop neighborhood",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    },
+    {
+      "feature_name": "ringConnectivityScore",
+      "category": "cluster",
+      "type": "float",
+      "description": "Log1p product of shared device and IP account counts",
+      "available_at_decision_time": true,
+      "uses_future_data": false
+    }
+  ]
+}

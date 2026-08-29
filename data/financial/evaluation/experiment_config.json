@@ -1,0 +1,14 @@
+{
+  "seed": 42,
+  "train_size": 7000,
+  "val_size": 1000,
+  "test_size": 2000,
+  "baseline_feature_count": 9,
+  "enhanced_feature_count": 34,
+  "lr_threshold_baseline": 0.05,
+  "lr_threshold_enhanced": 0.05,
+  "rf_threshold_baseline": 0.09,
+  "rf_threshold_enhanced": 0.18,
+  "experiment_duration_sec": 8.247,
+  "executed_at": "2026-08-29T18:06:26.191149+00:00"
+}

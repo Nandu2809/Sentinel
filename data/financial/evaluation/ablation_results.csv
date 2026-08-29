@@ -1,0 +1,6 @@
+configuration,feature_count,precision,recall,f1,roc_auc,pr_auc,fp,fn
+Baseline,9,0.9925,1.0,0.9962,1.0,1.0,1,0
+Baseline + Device Graph,16,0.9925,1.0,0.9962,1.0,1.0,1,0
+Baseline + IP Graph,17,0.9851,1.0,0.9925,1.0,1.0,2,0
+Baseline + Payment Graph,16,0.9706,1.0,0.9851,1.0,1.0,4,0
+Baseline + All Graph (Enhanced),34,0.9565,1.0,0.9778,1.0,1.0,6,0

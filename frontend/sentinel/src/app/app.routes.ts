@@ -59,6 +59,11 @@ export const routes: Routes = [
         title: 'Sentinel — Risk Intelligence',
       },
       {
+        path: 'financial-risk',
+        loadComponent: () => import('./features/financial-risk/financial-risk.component').then((m) => m.FinancialRiskComponent),
+        title: 'Sentinel — Financial Risk & AI Decision Engine',
+      },
+      {
         path: 'profile',
         loadComponent: () => import('./features/profile/profile.component').then((m) => m.ProfileComponent),
         title: 'Sentinel — Security Profile',

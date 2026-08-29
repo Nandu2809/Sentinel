@@ -1,0 +1,3 @@
+model,features,threshold,precision,recall,f1,roc_auc,pr_auc,tp,fp,tn,fn
+Random Forest,Baseline,0.35999999999999993,0.9746,0.9957,0.985,0.9999,0.9994,230,6,2763,1
+Random Forest,Enhanced,0.37999999999999995,0.9954,0.9351,0.9643,0.9999,0.9985,216,1,2768,15

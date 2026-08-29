@@ -1,0 +1,5 @@
+scenario,false_positive_cost,false_negative_cost,review_cost,friction_cost,optimal_threshold,fraud_recall,false_positive_rate,review_rate,total_cost,cost_per_1000
+Scenario A,5.0,50.0,3.0,1.0,0.05,1.0,0.0,0.0,0.0,0.0
+Scenario B,15.0,85.0,5.0,2.0,0.05,1.0,0.0,0.0,0.0,0.0
+Scenario C,30.0,100.0,8.0,3.0,0.05,1.0,0.0,0.0,0.0,0.0
+Scenario D,50.0,150.0,10.0,5.0,0.05,1.0,0.0,0.0,0.0,0.0

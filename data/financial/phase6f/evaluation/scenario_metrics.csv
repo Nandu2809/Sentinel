@@ -1,0 +1,12 @@
+scenario,is_fraud_label,total_count,baseline_accuracy,enhanced_accuracy,baseline_detection_recall,enhanced_detection_recall,baseline_fp,enhanced_fp,baseline_fn,enhanced_fn
+EVASIVE_FRAUD,1,23,0.9565,1.0,0.9565,1.0,0,0,1,0
+LOW_AND_SLOW_RING,1,26,1.0,0.4231,1.0,0.4231,0,0,0,15
+BORDERLINE_TRANSACTIONS,1,25,1.0,1.0,1.0,1.0,0,0,0,0
+MIXED_SIGNALS,1,28,1.0,1.0,1.0,1.0,0,0,0,0
+BEHAVIORAL_ANOMALY,1,34,1.0,1.0,1.0,1.0,0,0,0,0
+SHARED_IP_BURST,1,27,1.0,1.0,1.0,1.0,0,0,0,0
+DEVICE_SHARING_RING,1,26,1.0,1.0,1.0,1.0,0,0,0,0
+PAYMENT_REF_REUSE,1,19,1.0,1.0,1.0,1.0,0,0,0,0
+COMBINED_RING,1,23,1.0,1.0,1.0,1.0,0,0,0,0
+NONE,0,1979,1.0,0.9995,1.0,0.9995,0,1,0,0
+LEGITIMATE_SHARED_INFRASTRUCTURE,0,790,0.9924,1.0,0.9924,1.0,6,0,0,0

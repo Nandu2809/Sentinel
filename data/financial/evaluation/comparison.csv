@@ -1,0 +1,5 @@
+model,features,precision,recall,f1,roc_auc,pr_auc,fp,fn
+Logistic Regression,Baseline,1.0,1.0,1.0,1.0,1.0,0,0
+Logistic Regression,Enhanced,1.0,1.0,1.0,1.0,1.0,0,0
+Random Forest,Baseline,0.9925,1.0,0.9962,1.0,1.0,1,0
+Random Forest,Enhanced,0.9565,1.0,0.9778,1.0,1.0,6,0

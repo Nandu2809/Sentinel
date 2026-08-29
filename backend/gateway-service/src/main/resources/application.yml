@@ -30,7 +30,7 @@ spring:
         - id: risk-service
           uri: ${RISK_SERVICE_URL:http://localhost:8084}
           predicates:
-            - Path=/api/v1/risk/**,/api/v1/risks/**
+            - Path=/api/v1/risk/**,/api/v1/risks/**,/api/v1/financial-risk/**
         - id: alert-service
           uri: ${ALERT_SERVICE_URL:http://localhost:8085}
           predicates:

@@ -1,0 +1,41 @@
+{
+  "dataset_version": "2.0.0-Phase6F-Hardened",
+  "test_size": 3000,
+  "baseline_metrics": {
+    "precision": 0.9746,
+    "recall": 0.9957,
+    "f1": 0.985,
+    "roc_auc": 0.9999,
+    "pr_auc": 0.9994,
+    "tp": 230,
+    "fp": 6,
+    "tn": 2763,
+    "fn": 1
+  },
+  "enhanced_metrics": {
+    "precision": 0.9954,
+    "recall": 0.9351,
+    "f1": 0.9643,
+    "roc_auc": 0.9999,
+    "pr_auc": 0.9985,
+    "tp": 216,
+    "fp": 1,
+    "tn": 2768,
+    "fn": 15
+  },
+  "baseline_cost": 156.0,
+  "enhanced_cost": 263.0,
+  "cost_reduction_amount": -107.0,
+  "cost_reduction_percentage": -68.59,
+  "key_scenario_gains": {
+    "LOW_AND_SLOW_RING": {
+      "baseline_recall": 1.0,
+      "enhanced_recall": 0.4231
+    },
+    "EVASIVE_FRAUD": {
+      "baseline_recall": 0.9565,
+      "enhanced_recall": 1.0
+    }
+  },
+  "executed_at": "2026-08-29T18:17:22.310323+00:00"
+}

@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RiskAssessmentRepository extends JpaRepository<RiskAssessmentEntity, UUID> {
+    boolean existsByThreatId(UUID threatId);
+    java.util.List<RiskAssessmentEntity> findByUserId(UUID userId);
 }

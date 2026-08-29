@@ -1,0 +1,49 @@
+{
+  "generator_version": "2.0.0-Phase6F-Hardened",
+  "seed": 42,
+  "records": 15000,
+  "fraud_rate": 0.08,
+  "legitimate_count": 13800,
+  "fraud_count": 1200,
+  "train_count": 10500,
+  "validation_count": 1500,
+  "test_count": 3000,
+  "train_fraud_count": 832,
+  "val_fraud_count": 137,
+  "test_fraud_count": 231,
+  "features": [
+    "transactionId",
+    "userId",
+    "merchantId",
+    "amount",
+    "currency",
+    "timestamp",
+    "deviceId",
+    "ipAddress",
+    "location",
+    "paymentMethodRef",
+    "accountAgeDays",
+    "velocity1h",
+    "failedTxCount24h",
+    "sharedDeviceAccountCount",
+    "sharedIpAccountCount"
+  ],
+  "target": "isFraud",
+  "metadata_only_fields": [
+    "fraudScenario"
+  ],
+  "scenarios": {
+    "LEGITIMATE_SHARED_INFRASTRUCTURE": 4082,
+    "NONE": 9718,
+    "DEVICE_SHARING_RING": 133,
+    "LOW_AND_SLOW_RING": 133,
+    "BEHAVIORAL_ANOMALY": 133,
+    "COMBINED_RING": 133,
+    "BORDERLINE_TRANSACTIONS": 133,
+    "SHARED_IP_BURST": 133,
+    "EVASIVE_FRAUD": 133,
+    "PAYMENT_REF_REUSE": 133,
+    "MIXED_SIGNALS": 136
+  },
+  "created_at": "2026-08-29T18:16:08.999876+00:00"
+}
