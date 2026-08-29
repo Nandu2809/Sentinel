@@ -31,16 +31,9 @@ public class CorrelationIdFilter implements WebFilter, Ordered {
         exchange.getAttributes().put(CORRELATION_ID_ATTR, finalCorrelationId);
         exchange.getResponse().getHeaders().set(CORRELATION_ID_HEADER, finalCorrelationId);
 
-        HttpHeaders mutableHeaders = new HttpHeaders();
-        mutableHeaders.putAll(exchange.getRequest().getHeaders());
-        mutableHeaders.set(CORRELATION_ID_HEADER, finalCorrelationId);
-
-        ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(exchange.getRequest()) {
-            @Override
-            public HttpHeaders getHeaders() {
-                return mutableHeaders;
-            }
-        };
+        ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
+                .header(CORRELATION_ID_HEADER, finalCorrelationId)
+                .build();
 
         return chain.filter(exchange.mutate().request(mutatedRequest).build());
     }

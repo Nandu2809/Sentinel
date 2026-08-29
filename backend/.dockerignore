@@ -1,4 +1,6 @@
 **/target
+!gateway-service/target/*.jar
+!alert-service/target/*.jar
 .git
 .gitignore
 .idea

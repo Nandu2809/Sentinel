@@ -32,10 +32,10 @@ public interface IncidentRepository extends JpaRepository<IncidentEntity, UUID> 
     long countBySeverity(AlertSeverity severity);
 
     @Query("SELECT i FROM IncidentEntity i WHERE " +
-            "(:username IS NULL OR LOWER(i.affectedUser) LIKE LOWER(CONCAT('%', :username, '%'))) AND " +
-            "(:ipAddress IS NULL OR LOWER(i.affectedIp) LIKE LOWER(CONCAT('%', :ipAddress, '%'))) AND " +
-            "(:device IS NULL OR LOWER(i.affectedDevice) LIKE LOWER(CONCAT('%', :device, '%'))) AND " +
-            "(:eventType IS NULL OR LOWER(i.title) LIKE LOWER(CONCAT('%', :eventType, '%')) OR LOWER(i.description) LIKE LOWER(CONCAT('%', :eventType, '%'))) AND " +
+            "(CAST(:username AS string) IS NULL OR LOWER(i.affectedUser) LIKE LOWER(CONCAT('%', CAST(:username AS string), '%'))) AND " +
+            "(CAST(:ipAddress AS string) IS NULL OR LOWER(i.affectedIp) LIKE LOWER(CONCAT('%', CAST(:ipAddress AS string), '%'))) AND " +
+            "(CAST(:device AS string) IS NULL OR LOWER(i.affectedDevice) LIKE LOWER(CONCAT('%', CAST(:device AS string), '%'))) AND " +
+            "(CAST(:eventType AS string) IS NULL OR LOWER(i.title) LIKE LOWER(CONCAT('%', CAST(:eventType AS string), '%')) OR LOWER(i.description) LIKE LOWER(CONCAT('%', CAST(:eventType AS string), '%'))) AND " +
             "(:minRiskScore IS NULL OR i.riskScore >= :minRiskScore) AND " +
             "(:maxRiskScore IS NULL OR i.riskScore <= :maxRiskScore)")
     List<IncidentEntity> searchIncidents(

@@ -31,9 +31,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/incidents")
 public class IncidentController {
     private final IncidentService incidentService;
+    private final com.sentinel.alert.repository.AlertRepository alertRepository;
 
-    public IncidentController(IncidentService incidentService) {
+    public IncidentController(IncidentService incidentService, com.sentinel.alert.repository.AlertRepository alertRepository) {
         this.incidentService = incidentService;
+        this.alertRepository = alertRepository;
     }
 
     @GetMapping
@@ -96,6 +98,7 @@ public class IncidentController {
                 "{\"login1\":\"NYC\",\"login2\":\"TYO\",\"timeDeltaMinutes\":5}"
         );
 
+        testAlert = alertRepository.save(testAlert);
         IncidentEntity created = incidentService.createIncidentFromAlert(testAlert);
         return ApiResponse.success(HttpStatus.CREATED.value(), "Test impossible travel attack incident created", incidentService.getIncidentById(created.getId()));
     }
