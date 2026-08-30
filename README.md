@@ -1,116 +1,121 @@
-# Sentinel – Intelligent API Security & Threat Monitoring Platform
+# Sentinel — AI Risk Manager & Security Intelligence Platform
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Track](https://img.shields.io/badge/Razorpay%20Hackathon-Track%202%20AI%20Risk%20Manager-blueviolet)
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.5-green)
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-Cloud--Native-blue)
+![Angular](https://img.shields.io/badge/Angular-17-red)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-**Sentinel** is an enterprise-grade, hybrid security intelligence platform designed to protect microservice architectures from API abuse, signature-based OWASP threats, zero-day vulnerabilities, and behavioral anomalies. 
-
-Combining **Java 21 Spring Boot 3.x** microservices with a **Python 3.12 FastAPI Machine Learning Anomaly Engine**, Sentinel delivers real-time API monitoring, automated risk scoring, multi-channel SOC alerting, and explainable AI insights.
+**Sentinel** is an explainable, relationship-aware, cost-sensitive **AI Risk Management Platform** that converts financial transaction telemetry into operational security decisions. Built for the **Razorpay Hackathon Track 2 ("AI Risk Manager")**, Sentinel elevates fraud management beyond binary classification by fusing in-memory entity graph topology, behavioral machine learning, asymmetric business cost optimization, and SOC incident response.
 
 ---
 
-## 🏗️ Platform Architecture
+## 💡 Why Sentinel is Different
+
+> *"Sentinel does not only ask: IS THIS FRAUD? It asks: HOW RISKY IS THIS? WHY? WHAT WILL IT COST? AND WHAT SHOULD WE DO?"*
+
+1. **Relationship-Aware Intelligence**: 25 in-memory topology features linking Users, Hardware Device Fingerprints, IP Subnets, Payment Token References, and Merchants into multi-hop entity clusters.
+2. **Asymmetric Business Cost Optimization**: Decision operating boundaries ($\tau_{\text{block}} = 0.50$, $\tau_{\text{review}} = 0.25$) tuned against false positive penalties ($C_{\text{FP}} = \text{₹1,200}$), false negative chargebacks ($C_{\text{FN}} = \text{₹6,800}$), analyst review costs ($C_{\text{REVIEW}} = \text{₹400}$), and customer friction ($C_{\text{FRICTION}} = \text{₹160}$).
+3. **3-Tier Decision Engine**: Automated `APPROVE` ($p < 0.25$), human-in-the-loop analyst `REVIEW` ($0.25 \le p < 0.50$), and automated `BLOCK` ($p \ge 0.50$).
+4. **Anti-Leakage Scientific Discipline**: Scaler fit exclusively on `train.csv`, operating thresholds tuned on `validation.csv`, and held-out test data evaluated strictly once. Zero target or temporal leakage.
+5. **Integrated SOC Command Center**: Real-time Angular 17 Cyber Intelligence workstation (`/financial-risk`) with SVG topology graph, threshold policy simulator, business cost curve, and direct bridges to Incident Response (`/incidents`) and Threat Hunting (`/threat-hunting`).
+
+---
+
+## 🏗️ End-to-End System Architecture
 
 ```
- +---------------------------------------------------------------------------------------------------------+
- |                                          ENTERPRISE TRAFFIC                                             |
- |                               (HTTPS / TLS 1.3 via NGINX Ingress Controller)                            |
- +---------------------------------------------------------------------------------------------------------+
-                                                       |
-                                                       v
- +---------------------------------------------------------------------------------------------------------+
- |                                  KUBERNETES NAMESPACE: sentinel-system                                  |
- |                                                                                                         |
- |  [1. API Gateway Service] ──> gateway-service:8080 (Redis Rate Limiting & JWT Validation)              |
- |                                                                                                         |
- |  [2. Security Microservice Reactor]                                                                     |
- |   ├── auth-service:8081        (Identity Provider, JWT, BCrypt, RBAC)                               |
- |   ├── monitoring-service:8082  (API Traffic Collection, Metrics Aggregation)                            |
- |   ├── threat-service:8083      (Rule Engine, OWASP Signatures, Threat Events)                          |
- |   ├── risk-service:8084        (Multi-Factor Risk Scoring, Security Score 0-100)                      |
- |   ├── alert-service:8085       (SOC Alert Lifecycle, WebSocket/Email, SLA Escalation)                  |
- |   └── report-service:8086      (Dashboard Summary APIs, PDF/CSV/JSON Exporters)                       |
- |                                                                                                         |
- |  [3. AI Anomaly Engine (ai-engine/)]                                                                    |
- |   └── ai-engine:8000           (FastAPI, Isolation Forest, One-Class SVM, DBSCAN, XAI Explainer)       |
- |                                                                                                         |
- |  [4. Stateful Infrastructure]                                                                           |
- |   ├── PostgreSQL 16            (Relational Storage & Flyway Migrations)                                 |
- |   ├── Redis 7                  (Distributed Cache & Token Bucket Rate Limiting)                         |
- |   └── Apache Kafka & Zookeeper (Real-Time Asynchronous Event Bus)                                      |
- +---------------------------------------------------------------------------------------------------------+
+[Financial Transaction Telemetry]
+                │
+                ▼
+  FinancialRiskEvent (Envelope)
+                │
+                ▼
+  Kafka: sentinel.financial.events
+                │
+                ▼
+  FinancialRiskEventConsumer (risk-service)
+                │
+     ┌──────────┴──────────┐
+     ▼                     ▼
+Feature Extraction   Topology Graph Engine
+ (34 Features)       (Multi-Hop Entity Rings)
+     │                     │
+     └──────────┬──────────┘
+                ▼
+     Baseline & Enhanced ML
+                │
+                ▼
+    Cost-Aware Decision Engine
+ (APPROVE / REVIEW / BLOCK Policy)
+                │
+     ┌──────────┴──────────┐
+     ▼                     ▼
+PostgreSQL        Kafka: sentinel.alert-events
+(Risk DB)                  │
+                           ▼
+                  Alert & Incident Services
+                           │
+                           ▼
+               Sentinel SOC Command Center
+                    (/financial-risk)
 ```
 
 ---
 
-## ✨ Key Features
+## 📊 Phase 6F Benchmark Results
 
-- **Hybrid Threat Intelligence**: Signature-based OWASP rule evaluation fused with AI behavioral anomaly detection.
-- **Multi-Factor Risk Scoring Engine**: Calculates real-time entity risk profiles for Users, Endpoints, and IPs.
-- **SOC Alert Lifecycle & SLA Escalation**: Automated lifecycle state machine (`NEW` -> `ACKNOWLEDGED` -> `RESOLVED` -> `CLOSED`) with background cron SLA escalation.
-- **Explainable AI (XAI)**: Generates human-readable primary detection reasons and feature attribution metrics.
-- **Executive Security Dashboards**: High-throughput REST APIs supplying real-time metrics for Angular dashboards.
-- **Automated Report Exporter**: PDF, CSV, and JSON security posture reports.
-- **Post-Quantum Cryptography (PQC) Ready**: Architectural migration path for NIST FIPS 203 (ML-KEM) and FIPS 204 (ML-DSA).
+| Model Architecture | Feature Set | Precision | Recall | F1-Score | ROC-AUC | FP | FN | Expected Cost |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Baseline Random Forest** | Baseline (9 Features) | `0.9925` | `1.0000` | `0.9962` | `1.0000` | `1` | `0` | ₹1,200 |
+| **Enhanced Graph RF** | Enhanced (34 Features) | `0.9565` | `1.0000` | `0.9778` | `1.0000` | `6` | `0` | ₹7,200 |
+
+### Key Scenario Discoveries
+- **`EVASIVE_FRAUD` Gain**: Graph intelligence improved recall from **$95.65\% \rightarrow 100.0\%$ (+4.35%)**.
+- **`LEGITIMATE_SHARED_INFRASTRUCTURE`**: Graph topology reduced false positives on corporate NAT subnets from **$6 \rightarrow 0$ FP**.
+- **`LOW_AND_SLOW_RING` Tradeoff**: Disclosed honest limitation where baseline features caught low-velocity fraud ($100\% \rightarrow 42.31\%$).
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Backend**: Java 21, Spring Boot 3.3.5, Spring Cloud Gateway, Spring Security, Spring Data JPA, Flyway, Micrometer, Actuator, OpenAPI.
-- **AI Engine**: Python 3.12, FastAPI, Scikit-learn, Pandas, NumPy, Joblib, Pytest.
-- **Databases & Event Bus**: PostgreSQL 16, Redis 7, Apache Kafka.
-- **Containerization & Orchestration**: Docker, Kubernetes, Helm, NGINX Ingress, HPA.
-- **DevSecOps & CI/CD**: GitHub Actions, Trivy, Gitleaks, OWASP Dependency Check, Prometheus, Grafana, ELK Stack.
+- **Backend**: Java 21, Spring Boot 3.3.5, Spring Cloud Gateway, Spring Security, Spring Data JPA, Flyway, Micrometer, OpenAPI.
+- **AI Engine**: Python 3.12, PyTorch, Scikit-learn, Pandas, NumPy, Joblib.
+- **Databases & Event Bus**: PostgreSQL 16, Redis 7, Apache Kafka & Zookeeper.
+- **Frontend UI**: Angular 17, Tailwind CSS, RxJS, SVG Graph Engine.
 
 ---
 
-## 🚀 Quick Start & Deployment
+## 🚀 Quick Start
 
-### Local Docker Spin-Up
 ```bash
-# 1. Clone repository
+# 1. Clone Repository
 git clone https://github.com/madugundunanda-ui/Sentinel.git
 cd Sentinel
 
-# 2. Configure Environment Template
-cp .env.example .env
+# 2. Run Backend Unit Tests
+cd backend && mvn test
 
-# 3. Launch Platform via Docker Compose
-docker compose -f infrastructure/docker/docker-compose.yml up --build -d
-```
+# 3. Build Angular SOC UI
+cd ../frontend/sentinel && npm run build
 
-### Kubernetes Production Deployment
-```bash
-kubectl apply -f infrastructure/kubernetes/namespace.yaml
-kubectl apply -f infrastructure/kubernetes/configmaps/
-kubectl apply -f infrastructure/kubernetes/secrets/
-kubectl apply -f infrastructure/kubernetes/persistent-volumes/
-kubectl apply -f infrastructure/kubernetes/deployments/
-kubectl apply -f infrastructure/kubernetes/services/
-kubectl apply -f infrastructure/kubernetes/ingress/
-kubectl apply -f infrastructure/kubernetes/autoscaling/
+# 4. Launch Microservices & Infrastructure
+cd ../../infrastructure/docker && docker compose up -d
 ```
 
 ---
 
-## 📖 Documentation Directory
+## 📖 Key Hackathon Documentation
 
-- 📐 [Architecture Guide](docs/deployment/architecture.md)
-- 🐳 [Docker Deployment Guide](docs/deployment/docker-guide.md)
-- ☸️ [Kubernetes Operations Guide](docs/deployment/kubernetes-guide.md)
-- 🔄 [CI/CD Workflows](docs/deployment/ci-cd-guide.md)
-- 📊 [Monitoring & Prometheus Guide](docs/deployment/monitoring-guide.md)
-- 🛡️ [DevSecOps Security Controls](docs/deployment/security-guide.md)
-- 🔒 [Security Audit Report](docs/security/security-audit-report.md)
-- 🎯 [Penetration Testing Framework](docs/security/penetration-testing-report.md)
-- ⚛️ [Post-Quantum Readiness Architecture](docs/security/post-quantum-readiness.md)
-- ⚡ [Performance & Load Test Benchmarks](docs/performance/performance-report.md)
-- 📄 [Production Readiness Report](docs/production-readiness-report.md)
+- 🎯 [Judge Evidence & Capabilities](docs/judge-evidence.md)
+- 🎬 [5-Minute Judge Demo Guide](docs/hackathon-demo.md)
+- 📐 [Final System Architecture Audit](docs/phase6h-final-architecture-audit.md)
+- 📊 [Model Robustness & Validity Analysis](docs/phase6h-model-validity.md)
+- 🔬 [Phase 6H Final Verification Matrix](docs/phase6h-final-verification.md)
+- 💰 [Cost Benchmark & Decision Optimization](docs/financial-risk-cost-benchmark.md)
+- 🕸️ [Relationship Graph Feature Pipeline](docs/financial-feature-graph.md)
 
 ---
 

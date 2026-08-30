@@ -15,6 +15,7 @@ const NAV: NavItem[] = [
   { path: '/alerts', label: 'Alerts', glyph: 'ALT' },
   { path: '/threats', label: 'Threats', glyph: 'THR' },
   { path: '/risk', label: 'Risk Intel', glyph: 'RSK' },
+  { path: '/financial-risk', label: 'Fin Risk', glyph: 'FIN' },
   { path: '/profile', label: 'Profile', glyph: 'USR' },
   { path: '/admin', label: 'Admin', glyph: 'ADM' },
 ];
