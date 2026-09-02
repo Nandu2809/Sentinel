@@ -1,19 +1,18 @@
 # Sentinel — Relationship-Aware AI Financial Risk Intelligence Platform
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Hackathon Track](https://img.shields.io/badge/Razorpay%20AI%20Buildathon%202026-Track%202%20AI%20Risk%20Manager-blueviolet)
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.5-green)
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Angular](https://img.shields.io/badge/Angular-17-red)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-> **Important Disclosure**: *Sentinel is a hackathon prototype developed for the Razorpay AI Buildathon 2026 (Track 2: AI Risk Manager). All benchmarks and performance evaluations reported in this documentation were performed on synthetic demonstration data and engineered risk scenarios. These metrics serve as empirical proof of the end-to-end pipeline implementation and should not be interpreted as production accuracy on real Razorpay live payment traffic.*
+> **Important Disclosure**: *Sentinel is a prototype financial risk intelligence platform. All benchmarks and performance evaluations reported in this documentation were performed using synthetic demonstration data and engineered risk scenarios. These metrics serve as empirical evidence of the implemented pipeline and should not be interpreted as production accuracy on real-world payment traffic.*
 
 ---
 
 ## 🎯 One-Line Description
-Sentinel is a relationship-aware, explainable, and cost-sensitive **AI Financial Risk Intelligence Platform** that elevates financial transaction monitoring beyond binary isolation by fusing multi-hop entity graph topology, behavioral machine learning, asymmetric business cost optimization, and SOC incident response.
+Sentinel is a relationship-aware, explainable, and cost-sensitive **AI Financial Risk Intelligence Platform** that extends financial transaction monitoring beyond binary isolation by combining multi-hop entity relationship intelligence, behavioral machine learning, asymmetric business-cost optimization, and SOC incident response.
 
 ---
 
@@ -66,7 +65,7 @@ Sentinel introduces a 4-dimensional risk management framework:
 ```
                          ┌──────────────────┐
                          │  Angular Frontend │
-                         │   Judge / SOC UI  │
+                         │ SOC Workstation UI│
                          └─────────┬────────┘
                                    │
                                    ▼
@@ -182,7 +181,7 @@ $$\mathbb{E}[\text{Cost}] = C_{\text{FP}} \cdot N_{\text{FP}} + C_{\text{FN}} \c
 
 ## ⚡ Running Sentinel
 
-### Quick Local Rehearsal:
+### Quick Local Start:
 ```bash
 # 1. Clone & Navigate
 git clone https://github.com/madugundunanda-ui/Sentinel.git
@@ -200,21 +199,21 @@ cd ../../infrastructure/docker && docker compose up -d
 
 ---
 
-## 📖 Hackathon Documentation Index
-- 📐 [Phase 8 System Architecture](docs/phase8-architecture.md)
-- 🎬 [Phase 8 5-Minute Timed Pitch Script](docs/phase8-final-pitch.md)
-- ❓ [Phase 8 Judge Q&A Master Sheet (30 Questions)](docs/phase8-judge-qna.md)
-- 📊 [Phase 8 Benchmark Evidence & Disclosures](docs/phase8-benchmark-evidence.md)
-- ⚖️ [Phase 8 Competitive Positioning](docs/phase8-competitive-positioning.md)
-- 🧪 [Phase 8 Final Maven Test Report](docs/phase8-final-test-report.md)
-- 💻 [Phase 8 Frontend Verification Report](docs/phase8-frontend-verification.md)
-- 📋 [Phase 8 Demo Screenshot Checklist](docs/phase8-screenshot-checklist.md)
-- 🔄 [Phase 8 Demo Rehearsal Logs](docs/phase8-demo-rehearsal.md)
-- 🚨 [Phase 8 Emergency Fallback Plan](docs/phase8-demo-fallback.md)
-- ✅ [Phase 8 Submission Checklist](docs/phase8-submission-checklist.md)
-- 💻 [Phase 8 Demo Command Sheet](docs/phase8-command-sheet.md)
-- 🏆 [Phase 8 Final Readiness Scorecard](docs/phase8-final-readiness.md)
-- 💎 [Phase 8 Value Proposition Document](docs/phase8-value-proposition.md)
+## 📖 Project Documentation Index
+- 📐 [System Architecture & Data Flow](docs/phase8-architecture.md)
+- 🎬 [Presentation Pitch Script](docs/phase8-final-pitch.md)
+- ❓ [Risk Intelligence Q&A Master Sheet](docs/phase8-judge-qna.md)
+- 📊 [Benchmark Evidence & Disclosures](docs/phase8-benchmark-evidence.md)
+- ⚖️ [Competitive Positioning & Feature Matrix](docs/phase8-competitive-positioning.md)
+- 🧪 [Final Maven Test Report](docs/phase8-final-test-report.md)
+- 💻 [Frontend Verification Report](docs/phase8-frontend-verification.md)
+- 📋 [Demo Screenshot Checklist](docs/phase8-screenshot-checklist.md)
+- 🔄 [Demo Rehearsal Run Logs](docs/phase8-demo-rehearsal.md)
+- 🚨 [Emergency Component Fallback Plan](docs/phase8-demo-fallback.md)
+- ✅ [System Release Checklist](docs/phase8-submission-checklist.md)
+- 💻 [Demo Day Command Sheet](docs/phase8-command-sheet.md)
+- 🏆 [Final Readiness Scorecard](docs/phase8-final-readiness.md)
+- 💎 [Value Proposition Document](docs/phase8-value-proposition.md)
 
 ---
 
