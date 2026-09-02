@@ -1,7 +1,7 @@
 FROM eclipse-temurin:21-jre-alpine
 RUN addgroup -S sentinel && adduser -S sentinel -G sentinel
 WORKDIR /app
-COPY gateway-service/target/*.jar app.jar
+COPY gateway-service/target/*-SNAPSHOT.jar app.jar
 RUN chown -R sentinel:sentinel /app
 USER sentinel
 EXPOSE 8080

@@ -44,7 +44,7 @@ export class SecurityEventService implements OnDestroy {
 
     const wsUrl = environment.production
       ? `ws://${window.location.host}/ws/security-events`
-      : 'ws://localhost:8082/ws/security-events';
+      : 'ws://localhost:8088/ws/security-events';
 
     try {
       this.socket = new WebSocket(wsUrl);

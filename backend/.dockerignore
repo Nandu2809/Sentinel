@@ -1,9 +1,9 @@
 **/target
-!gateway-service/target/*.jar
-!alert-service/target/*.jar
+!**/target/*.jar
 .git
 .gitignore
 .idea
 .vscode
 *.log
 README.md
+

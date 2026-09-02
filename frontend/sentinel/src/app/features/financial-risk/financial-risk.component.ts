@@ -938,6 +938,40 @@ export class FinancialRiskComponent implements OnInit, OnDestroy {
 
     this.decisions = [dec, ...this.decisions];
     this.selectTransaction(dec);
+
+    // Trigger real backend evaluation API call
+    const eventPayload = {
+      transactionId: dec.threatId,
+      userId: dec.userId,
+      merchantId: dec.merchantId,
+      amount: dec.amount,
+      currency: 'INR',
+      timestamp: now,
+      deviceId: dec.deviceId,
+      ipAddress: dec.ipAddress,
+      location: dec.location,
+      paymentMethodRef: dec.paymentMethodRef,
+      accountAgeDays: dec.accountAgeDays,
+      velocity1h: dec.velocity1h,
+      failedTxCount24h: dec.failedTxCount24h,
+      sharedDeviceAccountCount: dec.sharedDeviceAccountCount,
+      sharedIpAccountCount: dec.sharedIpAccountCount
+    };
+
+    this.finRiskService.evaluateTransaction(eventPayload).subscribe({
+      next: (res) => {
+        this.finRiskService.addActivityLog({
+          type: 'RISK_EVALUATED',
+          message: `Live Backend API evaluate call succeeded for ${type} (txId=${dec.threatId})`,
+          severity: 'INFO'
+        });
+        this.refreshData();
+      },
+      error: (err) => {
+        console.warn('Backend evaluation call error:', err);
+      }
+    });
+
     this.finRiskService.addActivityLog({
       type: 'DECISION_GENERATED',
       message: `Scenario ${type} evaluated: txId=${dec.threatId} -> ${dec.decision} (Risk: ${dec.riskScore})`,

@@ -36,6 +36,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": { "buildTarget": "sentinel:build:production" },
             "development": { "buildTarget": "sentinel:build:development" }

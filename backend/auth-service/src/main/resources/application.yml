@@ -58,16 +58,16 @@ springdoc:
 
 sentinel:
   security:
-    allowed-origins: ${SENTINEL_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:5173}
+    allowed-origins: ${SENTINEL_ALLOWED_ORIGINS:http://localhost:4200,http://localhost:3000,http://localhost:5173}
     jwt:
       issuer: ${JWT_ISSUER:sentinel-auth-service}
-      secret: ${JWT_SECRET:}
+      secret: ${JWT_SECRET:change-me-very-long-secret-key-2026!}
       access-token-ttl: ${JWT_ACCESS_TOKEN_TTL:15m}
       refresh-token-ttl: ${JWT_REFRESH_TOKEN_TTL:7d}
   bootstrap:
-    admin-email: ${SENTINEL_BOOTSTRAP_ADMIN_EMAIL:}
-    admin-username: ${SENTINEL_BOOTSTRAP_ADMIN_USERNAME:}
-    admin-password: ${SENTINEL_BOOTSTRAP_ADMIN_PASSWORD:}
+    admin-email: ${SENTINEL_BOOTSTRAP_ADMIN_EMAIL:admin@sentinel.com}
+    admin-username: ${SENTINEL_BOOTSTRAP_ADMIN_USERNAME:admin}
+    admin-password: ${SENTINEL_BOOTSTRAP_ADMIN_PASSWORD:Admin@123456!}
 
 logging:
   pattern:
