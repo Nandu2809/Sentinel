@@ -3,6 +3,6 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-Set-Location -Path "$PSScriptRoot/../backend"
-mvn -pl auth-service -am spring-boot:run "-Dspring-boot.run.profiles=$Profile"
+Set-Location -Path "$PSScriptRoot/../backend/auth-service"
+mvn spring-boot:run "-Dspring-boot.run.profiles.active=$Profile"
 
