@@ -51,6 +51,11 @@ Use this mode for step-by-step feature development and live debugging.
 docker compose -f infrastructure/docker/docker-compose.yml up -d postgres redis kafka zookeeper mailpit
 ```
 
+#### Database & Networking Architecture:
+- **Docker Container Mode**: Microservices communicate over internal bridge network `sentinel-net` using host `postgres:5432`, `kafka:29092`, `redis:6379`.
+- **Local Host Mode**: Microservices executed directly (`mvn spring-boot:run`) fallback seamlessly to `localhost:5432` for PostgreSQL, `localhost:9092` for Kafka, and `localhost:6379` for Redis.
+- **Multi-Schema Database Design**: All services share PostgreSQL database `sentinel_db` under dedicated schemas (`auth`, `monitoring`, `threat`, `risk`, `alert`, `report`). Flyway automatically creates and applies schema migrations upon service startup.
+
 #### 2. Launch AI Engine
 ```powershell
 # From project root:
